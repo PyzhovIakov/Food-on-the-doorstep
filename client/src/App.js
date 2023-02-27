@@ -1,11 +1,11 @@
-import * as React from "react"
+import React from "react"
 import Navigation from "./Component/Navigation/Navigation"
 import useAuth from './hooks/auth.hook'
 import AuthContext from './context/AuthContext'
 
 function App() {
-  const {token,userId,role,login,logout} = useAuth()
-  const isAuth=!!token
+  const {login,logout,token,userId,role} = useAuth()
+  const isAuth=!!кщду
 
   return (
     <AuthContext.Provider value={{token,userId,role,login,logout,isAuth}}>

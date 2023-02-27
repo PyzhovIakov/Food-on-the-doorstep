@@ -17,7 +17,7 @@ export default function Login() {
     const loginHander  = async () =>{
         try{
            const data = await request('/auth/login', 'POST',{...form})
-           auth.login(data.token, data.userId, data.role)
+           auth.login(data.token, data._id)
         }catch(e){}
     }
 

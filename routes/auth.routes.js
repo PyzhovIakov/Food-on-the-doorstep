@@ -6,6 +6,7 @@ const config = require('config')
 const User = require('./../models/User')
 const router=Router()
 
+
 router.post(
     '/registration',
     [
@@ -19,18 +20,30 @@ router.post(
         if(!errors.isEmpty()){
             return res.status(400).json({errors:errors.array(), message:'Некоректные даннные при регистрации'})
         }
-        const {email,password,fullname,role}=req.body
-        
-        const candidate = await User.findOne({email:email})
+            
+        const candidate = await User.findOne({email:req.body.email})
         if(candidate){
             return res.status(400).json({message:'Пользователь c таким email уже зарегистрирован'})
         }
 
-        const hashedPassword =await bcrypt.hash(password,12)
-        const user = new User({email, password:hashedPassword,fullname,role})
-        await user.save()
+        const hashedPassword =await bcrypt.hash(req.body.password,12)
+            
+        const doc = new User({
+            email:req.body.email,
+            password:hashedPassword,
+            fullname:req.body.fullname,
+            role:req.body.role
+        })
+        const user= await doc.save()
 
-        res.status(201).json({message:'Успешно зарегистрировались'})
+        const {password, ...userData} = user._doc
+        const token = jwt.sign(
+            {userId:user.id},
+            config.get('jwtkey'),
+            {expiresIn:'1h'}
+        )
+        
+        res.json({...userData,token})
     }catch(e){
         res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
     }
@@ -48,26 +61,44 @@ router.post(
             if(!errors.isEmpty()){
                 return res.status(400).json({errors:errors.array(), message:'Некоректные даннные при авторизации'})
             }
-            const {email,password}=req.body
     
-            const user = await User.findOne({email})
+            const user = await User.findOne({email:req.body.email})
             if(!user){
                 return res.status(400).json({message:'Неверный логин'})
             }
-            const isMatch = await bcrypt.compare(password, user.password)
+            const isMatch = await bcrypt.compare(req.body.password, user.password)
             if(!isMatch){
                 return res.status(400).json({message:'Неверный пароль'})
             }
+
+            const {password, ...userData} = user._doc
             const token = jwt.sign(
                 {userId:user.id},
                 config.get('jwtkey'),
                 {expiresIn:'1h'}
             )
             
-            res.json({token,userId:user.id, role:user.role})
+            res.json({...userData,token})
         }catch(e){
             res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
         }
+})
+
+router.get('/:id', async(req,res)=>{
+    try
+    {
+        const userId = req.params.id
+        const user = await User.findById(userId)
+        if(!user){
+            return res.status(404).json({message:'Пользователь не найден'})
+        }
+
+        const {password, ...userData} = user._doc   
+        res.json({...userData})
+    }
+    catch(e){
+        res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
+    }
 })
 
 module.exports=router

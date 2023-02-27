@@ -1,15 +1,4 @@
 const MenuUserRoleController= (Role)=>{
-    if(Role===null){
-        return([ 
-            {to:'/',text:'Главная'},
-            {to:'/catalog', text:'Меню'},
-            {to:'/contacts', text:'Контакты'},
-            {to:'/basket', text:'Корзина'},
-            {to:'/login', text:'Авторизация'},
-            {to:'/regis', text:'Регистрация'}     
-        ]);
-        
-    }
     if(Role==='user'){
         return([ 
             {to:'/',text:'Главная'},
@@ -19,5 +8,13 @@ const MenuUserRoleController= (Role)=>{
             {to:'/profile', text:'Профиль'}      
         ]);
     }
+    return([ 
+        {to:'/',text:'Главная'},
+        {to:'/catalog', text:'Меню'},
+        {to:'/contacts', text:'Контакты'},
+        {to:'/basket', text:'Корзина'},
+        {to:'/login', text:'Авторизация'},
+        {to:'/regis', text:'Регистрация'}     
+    ]);
 }
 export default MenuUserRoleController
