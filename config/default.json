@@ -1,0 +1,5 @@
+{
+    "port":5000,
+    "jwtkey":"jwtkey",
+    "mongoUri":"mongodb+srv://admin:123@test.xqubylo.mongodb.net/?retryWrites=true&w=majority"
+}
