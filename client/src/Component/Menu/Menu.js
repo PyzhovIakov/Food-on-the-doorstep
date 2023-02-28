@@ -4,6 +4,7 @@ import {Link} from "react-router-dom"
 import Button from '@mui/material/Button'
 import AuthContext from './../../context/AuthContext'
 import MenuUserRoleController from './MenuUserRoleController'
+import logo from './../../Image/logo.png'
 
 function Menu() {
     const auth = useContext(AuthContext)
@@ -15,12 +16,20 @@ function Menu() {
     },[auth.role])
 
     return(
+        <Stack
+            sx={{ width: '100%', boxShadow: 3, height:'70px'}}
+            direction="row"
+            justifyContent="space-around"
+            alignItems="center"
+            spacing={3}
+        >
+            <div style={{ margin:5,padding:5, height:'60px', borderRadius:'5px'}}>
+            <Link to={'/'} >
+                <img src={logo} height={'100%'} style={{borderRadius:'10px'}}/>
+            </Link>
+            </div>
+            
             <Stack
-                sx={{
-                    width: '100%',
-                    boxShadow: 3,
-                    height:'70px'
-                }}
                 direction="row"
                 justifyContent="flex-end"
                 alignItems="center"
@@ -42,10 +51,9 @@ function Menu() {
                 {
                     auth.isAuth?<Button variant="contained" size="large" onClick={auth.logout} color="success">Выйти</Button>:null
                 }
-                
-                        
-                
+
             </Stack>
+        </Stack>
     );
 }
 export default Menu;

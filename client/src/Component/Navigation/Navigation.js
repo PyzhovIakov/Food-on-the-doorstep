@@ -8,7 +8,7 @@ import NavigationUserRoleController from './NavigationUserRoleController'
 
 export default function Navigation() {
     const auth = useContext(AuthContext)
-    const [pages,setPages] = useState([{path:'/', element:<Home/>, exact:true}])
+    const [pages,setPages] = useState([])
     
     useEffect(()=>{
         setPages(NavigationUserRoleController(auth.role))
@@ -18,6 +18,7 @@ export default function Navigation() {
         <BrowserRouter>
             <Menu/>
             <Routes>
+            <Route path={'/'} element={<Home/>} exact={true}/>
                 {
                     pages.map((page)=>(
                         <Route path={page.path} key={page.path} element={page.element} exact={page.exact}/>

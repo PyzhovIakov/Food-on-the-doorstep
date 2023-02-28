@@ -5,7 +5,7 @@ import AuthContext from './context/AuthContext'
 
 function App() {
   const {login,logout,token,userId,role} = useAuth()
-  const isAuth=!!кщду
+  const isAuth=!!role
 
   return (
     <AuthContext.Provider value={{token,userId,role,login,logout,isAuth}}>
