@@ -25,7 +25,7 @@ function Menu() {
         >
             <div style={{ margin:5,padding:5, height:'60px', borderRadius:'5px'}}>
             <Link to={'/'} >
-                <img src={logo} height={'100%'} style={{borderRadius:'10px'}}/>
+                <img src={logo} height={'100%'} style={{borderRadius:'10px'}} alt='Главная'/>
             </Link>
             </div>
             

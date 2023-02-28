@@ -1,7 +1,13 @@
+import React from 'react'
+import Carousel from '../../Component/Сarousel/Сarousel';
+
+
 export default function Catalog() {
-    return (
-        <div>
-            <h1>Что из бд</h1>
-        </div>
-    );
+ 
+  return (
+    <Carousel>
+
+        
+    </Carousel>
+  );
 }
