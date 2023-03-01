@@ -38,7 +38,7 @@ router.get('', async(req,res)=>{
             }
             newData[catalog[i].category].push(catalog[i]);
         }
-        res.json({...newData})
+        res.json(newData)
     }
     catch(e){
         res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})

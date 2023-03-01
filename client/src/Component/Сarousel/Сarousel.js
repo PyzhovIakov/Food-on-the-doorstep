@@ -27,7 +27,7 @@ function Carousel(props) {
             <div className="carousel-wrapper">
                  {  currentIndex > 0 && <button className="left-arrow" onClick={prev}>&lt;</button>}
                 <div className="carousel-content-wrapper"> 
-                    <div className="carousel-content" style={{ transform: `translateX(-${currentIndex * 245}px)` }}>
+                    <div className="carousel-content" style={{ transform: `translateX(-${currentIndex * 265}px)` }}>
                         {children}
                     </div>
                 </div>

@@ -1,29 +1,22 @@
-import React,{useEffect} from 'react'
-import Carousel from '../../Component/Сarousel/Сarousel'
-import Box from '@mui/material/Box'
-
-
+import React,{useEffect,useState} from 'react'
+import useHttp from './../../hooks/http.hook.js'
+import CategoriesProduct from './../../Component/categoriesProduct/categoriesProduct'
 
 export default function Catalog() {
- 
-    useEffect(()=>{
+  const {loading,request,error,ClearError} = useHttp()
+  const [product, setProduct] = useState({})
 
-
-    },[])
+  useEffect(()=>{
+    async function Fetchdata(){
+      const data =await request('/catalog','GET')
+      setProduct(data)
+    }
+    Fetchdata()
+  },[])
 
   return (
     <div>
-        <Carousel>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px' }}>1</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>2</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>3</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>4</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>5</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>6</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>7</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>8</Box>
-            <Box sx={{ width: 250, height: 250, backgroundColor: 'primary.dark', marginLeft:'5px',marginRight:'5px'}}>9</Box>
-        </Carousel>
+      {loading?null:<CategoriesProduct product={product}/>}     
     </div>
   );
 }
