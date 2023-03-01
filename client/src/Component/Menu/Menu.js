@@ -11,7 +11,6 @@ function Menu() {
     const [Links, setLinks] = useState([])
     
     useEffect(()=>{
-        console.log('Menu auth.role',auth.role)
         setLinks(MenuUserRoleController(auth.role))
     },[auth.role])
 

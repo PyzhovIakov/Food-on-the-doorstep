@@ -1,17 +1,41 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import './Carousel.css'
 
+function Carousel(props) {
+    const {children} = props
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [length, setLength] = useState(children.length)
 
-export default function Carousel() {
- 
-  return (
-    <div className="carousel-container">
-        <div className="carousel-wrapper">
-            <div className="carousel-content-wrapper">
-                <div className="carousel-content">
-                    {children}
+    useEffect(() => {
+        setLength(children.length)
+    }, [children])
+
+    const next = () => {
+        if (currentIndex < (length - 1)) {
+            setCurrentIndex(prevState => prevState + 1)
+        }
+    }
+    
+    const prev = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(prevState => prevState - 1)
+        }
+    }
+
+    return (
+        <div className="carousel-container">
+            <div className="carousel-wrapper">
+                 {  currentIndex > 0 && <button className="left-arrow" onClick={prev}>&lt;</button>}
+                <div className="carousel-content-wrapper"> 
+                    <div className="carousel-content" style={{ transform: `translateX(-${currentIndex * 245}px)` }}>
+                        {children}
+                    </div>
                 </div>
+                {currentIndex <= (length - 6) && <button className="right-arrow" onClick={next}>&gt;</button>}
             </div>
         </div>
-    </div>
-  );
+            
+    );
 }
+
+export default Carousel
