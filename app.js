@@ -1,13 +1,29 @@
 const express = require('express')
 const config =require('config')
 const mongoose = require('mongoose')
+const multer = require('multer')
+
 const app = express()
 
+const storage = multer.diskStorage({
+    destination:(_,__,cd)=>{
+        cd(null,'uploads')
+    },
+    filename:(_,file,cd)=>{
+        cd(null,file.originalname)
+    },
+})
+
+const upload = multer({storage})
 
 app.use(express.json({extended:true}))
 app.use('/auth',require('./routes/auth.routes'))
 app.use('/catalog',require('./routes/catalog.routes'))
 
+app.use('/uploads', express.static('uploads'))
+app.post('/upload', upload.single('image'), (req,res)=>{
+    res.json({url:`/uploads/${req.file.originalname}`})
+})
 
 const PORT = config.get('port') || 5000
 
