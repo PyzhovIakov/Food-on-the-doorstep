@@ -12,10 +12,10 @@ router.patch('/:id', async(req,res)=>{
             return res.status(404).json({message:'Пользователь не найден'})
         }
         user.basket.push(req.body.basket)
-        await User.updateOne({userId},{
+        const u = await User.updateOne({userId},{
             basket:user.basket
         })
-        res.json({message:"Успешно"})
+        res.json({message:u})
     }
     catch(e){
         res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})

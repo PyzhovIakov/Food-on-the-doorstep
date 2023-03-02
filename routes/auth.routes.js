@@ -62,7 +62,7 @@ router.post(
                 return res.status(400).json({errors:errors.array(), message:'Некоректные даннные при авторизации'})
             }
     
-            const user = await User.findOne({email:req.body.email})
+            const user = await User.findOne({email:req.body.email}).populate('basket')
             if(!user){
                 return res.status(400).json({message:'Неверный логин'})
             }

@@ -2,6 +2,7 @@ import React from 'react'
 import Carousel from './../Сarousel/Сarousel'
 import ProductCard from './../ProductCard/ProductCard'
 
+
 export default function CategoriesProduct(props) {
 
     return(
