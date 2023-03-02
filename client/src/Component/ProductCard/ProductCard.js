@@ -16,8 +16,7 @@ export default function ProductCard(props) {
 
     const AddProductinBaset = async(id)=>{
         if(ContextAuth.userId!==null){
-          const data = await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id})
-          console.log('data.message',data.message)
+          await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id})
         }
         else{
           BasketContext.AddBasket(id)

@@ -46,4 +46,20 @@ router.get('', async(req,res)=>{
     }
 })
 
+router.get('/:id', async(req,res)=>{
+    try
+    {
+        const productId = req.params.id
+        const product = await Catalog.findById(productId)
+        if(!product){
+            return res.status(404).json({message:'Продукт не найден'})
+        }
+
+        res.json(product)
+    }
+    catch(e){
+        res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
+    }
+})
+
 module.exports=router

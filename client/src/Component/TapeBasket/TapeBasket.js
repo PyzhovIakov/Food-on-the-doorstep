@@ -1,0 +1,37 @@
+import React from 'react'
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button'
+import logo from './../../Image/logo.png'
+
+export default function TapeBasket(props) {
+
+
+    return(
+        <Box sx={{ width:'95%', marginLeft:'auto',marginRight:'auto'}}>
+            {
+                props.productInBasket.length!==0?props.productInBasket.map((product,index)=>(
+                    <Stack key={index} direction="row" sx={{borderRadius:'15px' ,boxShadow:3, marginTop:'10px'}}>
+                        <img 
+                        src={product.imageUrl?props.product.imageUrl:logo} 
+                        width={'100%'} style={{borderRadius:'15px',maxHeight:'60%'}} 
+                        alt={product.name}/>
+                        <Stack direction="column">
+                            <Stack direction="row">
+                                <h2 style={{padding:0,margin:'0 15px'}}>{product.name}</h2>
+                                <h3 style={{padding:0,margin:'0 15px'}}>{product.price}p</h3>
+                            </Stack>
+                            <h4 style={{padding:0,margin:'0 15px'}}>{product.description}</h4>
+                        </Stack>
+                        <Stack direction="column">
+                            <Button variant="contained" color="success" sx={{borderRadius:'15px'}}>
+                                Удалить        
+                            </Button>
+                        </Stack>
+                    </Stack>
+                )):null
+            }
+            
+        </Box>
+    );
+}
