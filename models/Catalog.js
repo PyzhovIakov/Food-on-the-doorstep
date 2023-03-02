@@ -6,7 +6,7 @@ const schema = new Schema({
     weight:{type:String},
     price:{type:Number, required:true},
     description:{type:String, required:true},
-    image:{type:String},
+    imageUrl:{type:String},
 })
 
 module.exports = model('Catalog',schema)

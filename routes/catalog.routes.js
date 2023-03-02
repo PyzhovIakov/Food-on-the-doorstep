@@ -14,7 +14,8 @@ router.post(
                 category:req.body.category,
                 weight:req.body.weight,
                 price:req.body.price,
-                description:req.body.description
+                description:req.body.description,
+                imageUrl:req.body.imageUrl
             })
             await doc.save()
 

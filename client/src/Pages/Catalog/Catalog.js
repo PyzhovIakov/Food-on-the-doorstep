@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import useHttp from './../../hooks/http.hook.js'
 import CategoriesProduct from './../../Component/categoriesProduct/categoriesProduct'
+import Alert from '@mui/material/Alert';
 
 export default function Catalog() {
   const {loading,request,error,ClearError} = useHttp()
@@ -12,10 +13,11 @@ export default function Catalog() {
       setProduct(data)
     }
     Fetchdata()
-  },[])
+  },[request])
 
   return (
     <div>
+      {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
       {loading?null:<CategoriesProduct product={product}/>}     
     </div>
   );
