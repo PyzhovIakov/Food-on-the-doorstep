@@ -5,6 +5,7 @@ const multer = require('multer')
 
 const app = express()
 
+//storage img
 const storage = multer.diskStorage({
     destination:(_,__,cd)=>{
         cd(null,'uploads')
@@ -13,20 +14,22 @@ const storage = multer.diskStorage({
         cd(null,file.originalname)
     },
 })
-
 const upload = multer({storage})
 
 app.use(express.json({extended:true}))
 app.use('/auth',require('./routes/auth.routes'))
-app.use('/catalog',require('./routes/catalog.routes'))
+app.use('/catalog',require('./routes/catalog.routes')) 
+app.use('/basket',require('./routes/basket.routes')) 
 
+//uploads images
 app.use('/uploads', express.static('uploads'))
 app.post('/upload', upload.single('image'), (req,res)=>{
     res.json({url:`/uploads/${req.file.originalname}`})
 })
 
-const PORT = config.get('port') || 5000
 
+
+const PORT = config.get('port') || 5000
 async function start(){
     try {
         mongoose.set('strictQuery', true)

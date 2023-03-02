@@ -88,12 +88,11 @@ router.get('/:id', async(req,res)=>{
     try
     {
         const userId = req.params.id
-        const user = await User.findById(userId)
+        const user = await User.findById(userId).populate('basket')
         if(!user){
             return res.status(404).json({message:'Пользователь не найден'})
         }
-
-        const {password, ...userData} = user._doc   
+        const {password, ...userData} = user._doc 
         res.json({...userData})
     }
     catch(e){
