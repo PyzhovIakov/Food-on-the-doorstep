@@ -8,7 +8,8 @@ router.post(
     '',
     async (req,res)=>{
         try{    
-               
+            
+            
             const doc = new Catalog({
                 name:req.body.name,
                 category:req.body.category,

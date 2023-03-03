@@ -13,10 +13,10 @@ router.patch('/:id', async(req,res)=>{
         }
         if(!user.basket.includes(req.body.basket)){
             user.basket.push(req.body.basket)
-            const u = await User.updateOne({userId},{
+            const update = await User.updateOne({userId},{
                 basket:user.basket
             })
-            res.json({message:u})
+            res.json({message:update})
         }
         else{
             res.json({message:'Такой товар уже в корзине'})
