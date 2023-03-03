@@ -11,11 +11,16 @@ router.patch('/:id', async(req,res)=>{
         if(!user){
             return res.status(404).json({message:'Пользователь не найден'})
         }
-        user.basket.push(req.body.basket)
-        const u = await User.updateOne({userId},{
-            basket:user.basket
-        })
-        res.json({message:u})
+        if(!user.basket.includes(req.body.basket)){
+            user.basket.push(req.body.basket)
+            const u = await User.updateOne({userId},{
+                basket:user.basket
+            })
+            res.json({message:u})
+        }
+        else{
+            res.json({message:'Такой товар уже в корзине'})
+        }
     }
     catch(e){
         res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})

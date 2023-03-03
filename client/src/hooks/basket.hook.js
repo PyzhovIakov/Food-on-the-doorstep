@@ -1,16 +1,30 @@
-import {useState} from 'react'
+import {useState,useCallback,useEffect} from 'react'
+const StorageName = 'BasketData'
 
 const useBasket = () => {
     const [basket, setBasket] = useState([])
 
-    const AddBasket=(id)=>{
+    const AddBasket=useCallback((id)=>{
         if(!basket.includes(id)){
-            const prevBasket = basket
-            prevBasket.push(id)
-            setBasket(prevBasket)
+            setBasket((prevBasket)=>[...prevBasket, id])
+            localStorage.setItem(StorageName,JSON.stringify({basket:basket}))
         }
-    }
+    },[basket])
     
-    return{basket,AddBasket}
+    const DeleteBasket = useCallback(()=>{
+        setBasket([])
+        localStorage.removeItem(StorageName)
+    }, [])
+
+   useEffect(()=>{
+       
+        const data  = JSON.parse(localStorage.getItem(StorageName))
+        if(data && data.basket){
+            setBasket(data.basket)
+        }
+    },[])
+
+
+    return{basket,AddBasket,DeleteBasket}
 }
 export default useBasket

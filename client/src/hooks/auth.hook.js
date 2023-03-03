@@ -29,16 +29,18 @@ const useAuth = () => {
         localStorage.removeItem(StorageName)
     }, [])
 
-   useEffect(()=>{
-       
+    const CheckingAuthorizedUser = useCallback(()=>{
         const data  = JSON.parse(localStorage.getItem(StorageName))
         if(data && data.token){
             roleDefinition(data.userId)
             login(data.token, data.userId)
         }
-        
+    }, [login,roleDefinition])
+
+   useEffect(()=>{
+        CheckingAuthorizedUser()      
     },[])
 
-    return {login,logout,token,userId,role}
+    return {login,logout,CheckingAuthorizedUser,token,userId,role}
 }
 export default useAuth
