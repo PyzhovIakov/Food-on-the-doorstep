@@ -20,6 +20,7 @@ app.use(express.json({extended:true}))
 app.use('/auth',require('./routes/auth.routes'))
 app.use('/catalog',require('./routes/catalog.routes')) 
 app.use('/basket',require('./routes/basket.routes')) 
+app.use('/order',require('./routes/order.routes'))
 
 //uploads images
 app.use('/uploads', express.static('uploads'))
