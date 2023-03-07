@@ -6,7 +6,7 @@ import Contacts from "../../Pages/Сontacts/Сontacts"
 import Regis from "../../Pages/Regis/Regis"
 import Catalog from "../../Pages/Catalog/Catalog"
 import Login from "../../Pages/Login/Login"
-
+import Orders from "../../Pages/Orders/Orders"
 
 const NavigationUserRoleController=(Role) =>{
     if(Role==='user'){
@@ -22,6 +22,7 @@ const NavigationUserRoleController=(Role) =>{
         return([
             {path:'/catalog', element:<Catalog/>, exact:true},
             {path:'/contacts', element:<Contacts/>, exact:true},
+            {path:'/orders', element:<Orders/>, exact:true},
             {path:'*', element:<Navigate to="/" replace />, exact:false},
             {path:'/profile', element:<Profile/>, exact:true}
         ]);

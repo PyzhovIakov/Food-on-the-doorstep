@@ -10,6 +10,7 @@ const MenuUserRoleController= (Role)=>{
     if(Role==='manager'){
         return([  
             {to:'/catalog', text:'Меню'},
+            {to:'/orders', text:'Заказы'},
             {to:'/contacts', text:'Контакты'},
             {to:'/profile', text:'Профиль'}      
         ]);

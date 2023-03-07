@@ -3,6 +3,19 @@ const Order = require('./../models/Order')
 const User = require('./../models/User')
 const router=Router()
 
+
+router.get('', async(req,res)=>{
+    try
+    {
+        const order = await Order.find().populate('listProducts').populate('userId')
+        
+        res.json(order)
+    }
+    catch(e){
+        res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
+    }
+})
+
 router.post(
     '',
     async (req,res)=>{
