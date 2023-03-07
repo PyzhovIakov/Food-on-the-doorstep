@@ -35,11 +35,18 @@ router.post(
                 fullname=user.fullname
             }
 
+            const dateOrder = new Date()   
+            dateOrder.setHours(dateOrder.getHours()+3)
+            const dateDelivery = new Date()   
+            dateDelivery.setHours(dateDelivery.getHours()+6)
+            
             const doc = new Order({
                 userId:req.body.userId,
                 listProducts:req.body.listProducts,
-                status:"новый",
-                fullname:fullname
+                status:"Новый",
+                fullname:fullname,
+                dateOrder:dateOrder,
+                dateDelivery:dateDelivery
             })
             
             await doc.save()

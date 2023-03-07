@@ -50,12 +50,12 @@ export default function Basket() {
             if(!!ContextAuth.userId){
                 await request(
                     '/order',
-                        'POST',
-                        {
+                    'POST',
+                    {
                         userId:ContextAuth.userId,
                         listProducts:productListId,
                     }
-                        )
+                )
 
                 setProduct([])
                 setProductListId([])
