@@ -22,7 +22,6 @@ export default function OrderCard(props) {
         setFormOrderCard(f=>({...f, cost:price}))
         setFormOrderCard(f=>({...f, status:props.order.status}))
         setFormOrderCard(f=>({...f, datetime:datetimeDB[0]}))
-        console.log('formOrderCard',formOrderCard)
     },[props.order])
     
 
@@ -33,8 +32,8 @@ export default function OrderCard(props) {
             justifyContent="space-between"
             sx={{boxShadow:5, marginTop:'10px'}}
         >
+            <h3 style={{minWidth:'15%'}}>{props.order.fullname}</h3>
             <Stack direction="row" spacing={2} sx={{marginLeft:'10px'}}>
-                <h3>{props.order.fullname}</h3>
                 <FormControl variant="standard" sx={{minWidth:'160px'}}>
                     <InputLabel id="demo-simple-select-label">Статус</InputLabel>
                     <Select
@@ -59,9 +58,9 @@ export default function OrderCard(props) {
                     onChange={handleChange}
                     value={formOrderCard.datetime}
                 />  
-                <h4 style={{margin:'auto 5px'}}>Сумма заказа:{formOrderCard.cost}р</h4>
+                <h4 style={{margin:'auto 0'}}>Сумма заказа:{formOrderCard.cost}р</h4>
             </Stack>
-            <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center" sx={{marginRight:'10px'}}>
+            <Stack direction="row" spacing={2}  alignItems="center" sx={{marginRight:'10px'}}>
                 <Button size="small" variant="contained" color="success" sx={{borderRadius:'15px'}}>Сохранить</Button>
                 <Button size="small" variant="contained" color="success" sx={{borderRadius:'15px'}}>Просмотреть</Button>
                 <Button size="small" variant="contained" color="success" sx={{borderRadius:'15px'}}>Удалить</Button>

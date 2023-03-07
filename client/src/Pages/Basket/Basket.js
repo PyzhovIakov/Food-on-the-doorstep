@@ -46,7 +46,7 @@ export default function Basket() {
 
     const CheckoutUser = async() =>{
         try{
-            if(productListId.length===0){return;}
+            if(productListId.length===0 && BasketContext.basket.length===0){return;}
             if(!!ContextAuth.userId){
                 await request(
                     '/order',
@@ -56,7 +56,6 @@ export default function Basket() {
                         listProducts:productListId,
                     }
                 )
-
                 setProduct([])
                 setProductListId([])
             }
@@ -64,7 +63,7 @@ export default function Basket() {
                 setOpenCheckoutDialog(true);
             }
             
-         }catch(e){}
+         }catch(e){console.log('Basket CheckoutUser', e)}
     }
 
     return (
