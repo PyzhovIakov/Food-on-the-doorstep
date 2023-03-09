@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken')
 const config = require('config')
 
 checkToken = (req,res,next)=>{
-    const token = (req.headers.authorization || '').replace(/Bearer\s?/,'')
-    console.log('req.headers.authorization',req.headers.authorization)
+    const token = req.body.token
+   
     if(token){
         try
         {  
@@ -12,11 +12,11 @@ checkToken = (req,res,next)=>{
             req.userId=decoded.userId
             next()
         }catch(e){
-            return res.status(403).json({message:'Нет доступа'})
+            return res.status(403).json({errors:'Нет доступа'})
         }
     }
     else{
-        return res.status(403).json({message:'Нет доступа'})
+        return res.status(403).json({errors:'Нет доступа'})
     }
 };
 module.exports=checkToken

@@ -1,14 +1,19 @@
 const {Router} = require('express')
-//const {check, validationResult}=require('express-validator')
+const {validationResult}=require('express-validator')
+const {productValidation} = require('./../check/checkCatalog')
 const Catalog = require('./../models/Catalog')
 const router=Router()
 
-//no check
+
 router.post(
     '',
+    productValidation,
     async (req,res)=>{
         try{    
-            
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                return res.status(400).json({errors:errors.array()})
+            }
             
             const doc = new Catalog({
                 name:req.body.name,
@@ -22,7 +27,7 @@ router.post(
 
             res.json({message:'Успешно'})
         }catch(e){
-            res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
+            res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
         }
     }
 )
@@ -43,7 +48,7 @@ router.get('', async(req,res)=>{
         res.json(newData)
     }
     catch(e){
-        res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 
@@ -53,13 +58,13 @@ router.get('/:id', async(req,res)=>{
         const productId = req.params.id
         const product = await Catalog.findById(productId)
         if(!product){
-            return res.status(404).json({message:'Продукт не найден'})
+            return res.status(404).json({errors:'Продукт не найден'})
         }
 
         res.json(product)
     }
     catch(e){
-        res.status(500).json({message:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 
