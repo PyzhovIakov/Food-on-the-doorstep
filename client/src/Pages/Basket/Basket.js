@@ -55,6 +55,7 @@ export default function Basket() {
 
     const CheckoutUser = async() =>{
         try{
+            
             if(productListId.length===0 && BasketContext.basket.length===0){return;}
             if(!!ContextAuth.userId){
                 const data = await request('/order', 'POST',
@@ -67,6 +68,7 @@ export default function Basket() {
                 if(data.message){setMessage(data.message)}
                 setProduct([])
                 setProductListId([])
+                ContextAuth.updateUserBasket(ContextAuth.userId)
             }
             else{
                 setOpenCheckoutDialog(true);

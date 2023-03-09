@@ -8,6 +8,8 @@ const AuthContext = createContext({
     role:null,
     login:noop,
     logout:noop,
+    userBasket:[],
+    updateUserBasket:noop,
     isAuth:false
 })
 

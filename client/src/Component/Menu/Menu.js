@@ -2,17 +2,22 @@ import React,{useContext, useEffect, useState} from 'react';
 import Stack from '@mui/material/Stack'
 import {Link} from "react-router-dom"
 import Button from '@mui/material/Button'
+import LogoutIcon from '@mui/icons-material/Logout'
+import Badge from '@mui/material/Badge'
 import AuthContext from './../../context/AuthContext'
+import TemporaryBasketContext from './../../context/TemporaryBasketContext'
 import MenuUserRoleController from './MenuUserRoleController'
 import logo from './../../Image/logo.png'
 
 function Menu() {
     const auth = useContext(AuthContext)
+    const basketContext = useContext(TemporaryBasketContext)
     const [Links, setLinks] = useState([])
-    
+
     useEffect(()=>{
+        if(auth.userId!==null){ auth.updateUserBasket(auth.userId)}
         setLinks(MenuUserRoleController(auth.role))
-    },[auth.role])
+    },[auth.role,auth.userId])
 
     return(
         <Stack
@@ -33,14 +38,14 @@ function Menu() {
                 justifyContent="flex-end"
                 alignItems="center"
                 spacing={3}
-                sx={{margin:'0 5px'}}
+                sx={{margin:'0 8px'}}
             >
                 {
                     Links.map((link,index)=>(
                         <Link 
                             to={link.to} 
                             key={index} 
-                            style={{margin:5, textDecoration: 'none',padding:5}}
+                            style={{margin:'0 8px', textDecoration: 'none'}}
                         >
                             <Button variant="contained" size="large"  color="success">
                                 {link.text}
@@ -49,7 +54,34 @@ function Menu() {
                     ))
                 }
                 {
-                    auth.isAuth?<Button variant="contained" size="large" onClick={auth.logout} color="success">Выйти</Button>:null
+                    (auth.role!=='manager' || auth.role!=='admin')? 
+                        <Link to={'/basket'} style={{margin:'0 8px', textDecoration: 'none'}}>
+                            <Badge 
+                                color="success" 
+                                badgeContent={auth.isAuth?auth.userBasket.length:basketContext.basket.length} 
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                            >
+                                <Button variant="contained" size="large" color="success">
+                                    Корзина
+                                </Button>
+                            </Badge>
+                        </Link>
+                        :null
+                }
+                {
+                    auth.isAuth?
+                    <>
+                        <Link to={'/profile'} style={{margin:5, textDecoration: 'none'}}>
+                            <Button variant="contained" size="large" color="success">Профиль</Button>
+                        </Link>
+                        <Link to={'/'} style={{margin:5, textDecoration: 'none'}}>
+                            <Button variant="contained" size="large" onClick={auth.logout} color="success" endIcon={<LogoutIcon />}>Выход</Button>
+                        </Link>
+                    </>
+                    :null
                 }
 
             </Stack>

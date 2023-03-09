@@ -28,10 +28,9 @@ router.post(
 
             let fullname=""
             if(!user){
-                
                 fullname=req.body.fullname
             }else{
-                const update = await User.updateOne({userId},{
+                await User.updateOne({_id:userId},{
                     basket:[]
                 })
                 fullname=user.fullname
