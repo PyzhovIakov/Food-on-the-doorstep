@@ -9,10 +9,12 @@ const useAuth = () => {
     const {request,ClearError} = useHttp()
 
     const roleDefinition = useCallback(async(userId)=>{
-        const user = await request('/auth/'+userId, 'GET')
-        ClearError()
-        if(user.role){setRole(user.role)}
-        else{setRole(null)}
+        try{
+            const user = await request('/auth/'+userId, 'GET')
+            ClearError()
+            if(user.role){setRole(user.role)}
+            else{setRole(null)}
+        }catch(e){console.log('useAuth roleDefinition',e)}     
     },[request,ClearError])
 
     const login = useCallback((jwtToken, id)=>{

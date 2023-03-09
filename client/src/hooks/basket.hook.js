@@ -8,6 +8,9 @@ const useBasket = () => {
         if(!basket.includes(id)){
             setBasket((prevBasket)=>[...prevBasket, id])
             localStorage.setItem(StorageName,JSON.stringify({basket:basket}))
+            return {message:"Товар добавлен в корзину"}
+        }else{
+            return{errors:"Такой товар уже в корзине"}
         }
     },[basket])
     

@@ -18,14 +18,14 @@ function Menu() {
         <Stack
             sx={{ width: '100%', boxShadow: 3, height:'70px'}}
             direction="row"
-            justifyContent="space-around"
+            justifyContent="space-between"
             alignItems="center"
             spacing={3}
         >
             <div style={{ margin:5,padding:5, height:'60px', borderRadius:'5px'}}>
-            <Link to={'/'} >
-                <img src={logo} height={'100%'} style={{borderRadius:'10px'}} alt='Главная'/>
-            </Link>
+                <Link to={'/'} >
+                    <img src={logo} height={'100%'} style={{borderRadius:'10px'}} alt='Главная'/>
+                </Link>
             </div>
             
             <Stack
@@ -33,6 +33,7 @@ function Menu() {
                 justifyContent="flex-end"
                 alignItems="center"
                 spacing={3}
+                sx={{margin:'0 5px'}}
             >
                 {
                     Links.map((link,index)=>(

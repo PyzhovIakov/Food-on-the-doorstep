@@ -43,7 +43,7 @@ export default function CheckoutDialog(props) {
   return (
     <div>
       <Dialog open={props.open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Заказ</DialogTitle>
         <DialogContent>
           <DialogContentText> 
             Введите ФИО получателя.
