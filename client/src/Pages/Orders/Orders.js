@@ -6,11 +6,16 @@ import OrdersTape from './../../Component/OrdersTape/OrdersTape'
 export default function Orders() {
     const {loading,request,error,ClearError} = useHttp()
     const [orders, setOrders] = useState([])
-    
+    const [errors, setErrors] = useState(null)
+    const [message, setMessage] = useState(null)
+
     useEffect(()=>{
         async function Fetchdata(){
-          const data =await request('/order','GET')
-          setOrders(data)
+            try{
+                const data =await request('/order','GET')
+                setOrders(data)
+                if(data.errors){setErrors(data.errors)}
+            }catch(e){console.log('Orders useEffect Fetchdata', e)}
         }
         Fetchdata()
     },[request])
@@ -19,7 +24,9 @@ export default function Orders() {
         <div>
             <h1>Заказы</h1>
             {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
-            {loading?null:<OrdersTape orders={orders}/>}
+            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
+            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
+            {loading?null:<OrdersTape setMessage={setMessage} setErrors={setErrors} orders={orders}/>}
         </div>
     );
 }

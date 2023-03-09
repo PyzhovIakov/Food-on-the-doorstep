@@ -22,17 +22,21 @@ export default function CheckoutDialog(props) {
     };
 
     const CheckoutUser = async() =>{
-        await request(
-            '/order', 
-            'POST',
-            {
-                listProducts:BasketContext.basket,
-                fullname:form
-            }
-        )
-        props.setProduct([])
-        BasketContext.DeleteBasket()
-        props.setOpen(false);
+      try{
+        const data = await request(
+          '/order', 
+          'POST',
+          {
+              listProducts:BasketContext.basket,
+              fullname:form
+          }
+      )
+      if(data.errors){props.setErrors(data.errors)}
+      if(data.message){props.setMessage(data.message)}
+      props.setProduct([])
+      BasketContext.DeleteBasket()
+      props.setOpen(false);
+      }catch(e){console.log('CheckoutDialog CheckoutUser',e)}  
     }
 
 

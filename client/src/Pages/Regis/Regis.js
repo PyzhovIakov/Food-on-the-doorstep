@@ -9,6 +9,8 @@ export default function Regis() {
     const {loading,request,error,ClearError} = useHttp()
     const [form, setForm] = useState({email:'',password:'', fullname:''})
     const auth = useContext(AuthContext)
+    const [message, setMessage] = useState(null)
+    const [errors, setErrors] = useState(null)
 
     const ChangeHandler= event=>{
         setForm({...form,[event.target.name]:event.target.value})
@@ -18,7 +20,9 @@ export default function Regis() {
         try{
             const data = await request('/auth/registration', 'POST',{...form,role:'user'})
             auth.login(data.token, data._id)
-        }catch(e){}
+            if(data.errors){setErrors(data.errors)}
+            if(data.message){setMessage(data.message)}
+        }catch(e){console.log('Regis registerHander', e)}
     } 
 
     const TextFields =[
@@ -30,6 +34,8 @@ export default function Regis() {
     return (
         <div>
             {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
+            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
+            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
             <Stack
             direction="row"
             justifyContent="space-evenly"

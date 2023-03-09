@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
-import useHttp from './../../hooks/http.hook'
+import useHttp from '../../../hooks/http.hook'
 
 export default function OrderCard(props) {
     const {request} = useHttp()
@@ -28,7 +28,7 @@ export default function OrderCard(props) {
     
     const saveChanges = async() =>{
         try{
-            await request(
+            const data = await request(
                 `/order/${props.order._id}`,
                 'PATCH',
                 {
@@ -36,7 +36,9 @@ export default function OrderCard(props) {
                     dateDelivery:formOrderCard.datetime,
                 }
             )
-         }catch(e){}
+            if(data.errors){props.setErrors(data.errors)}
+            if(data.message){props.setMessage(data.message)}
+         }catch(e){console.log('OrderCard saveChanges',e)}
     }
 
     return(

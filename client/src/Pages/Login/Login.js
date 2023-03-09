@@ -9,6 +9,8 @@ export default function Login() {
     const {loading,request,error,ClearError} = useHttp()
     const [form, setForm] = useState({email:'',password:''})
     const auth = useContext(AuthContext)
+    const [message, setMessage] = useState(null)
+    const [errors, setErrors] = useState(null)
 
     const ChangeHandler= event=>{
         setForm({...form,[event.target.name]:event.target.value})
@@ -18,7 +20,9 @@ export default function Login() {
         try{
            const data = await request('/auth/login', 'POST',{...form})
            auth.login(data.token, data._id)
-        }catch(e){}
+           if(data.errors){setErrors(data.errors)}
+           if(data.message){setMessage(data.message)}
+        }catch(e){console.log('Login loginHander', e)}
     }
 
     const TextFields =[
@@ -29,6 +33,8 @@ export default function Login() {
     return (
         <div>
             {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
+            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
+            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
             <Stack
                 direction="row"
                 justifyContent="space-evenly"

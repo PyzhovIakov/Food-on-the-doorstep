@@ -1,6 +1,6 @@
 import React from 'react'
-import Carousel from './../Сarousel/Сarousel'
-import ProductCard from './../ProductCard/ProductCard'
+import Carousel from './Сarousel/Сarousel'
+import ProductCard from './ProductCard/ProductCard'
 
 
 export default function CategoriesProduct(props) {
@@ -15,6 +15,8 @@ export default function CategoriesProduct(props) {
                         {
                             props.product[key].map((product, index)=>(
                                 <ProductCard
+                                    setMessage={props.setMessage}
+                                    setErrors={props.setErrors}
                                     key={index}
                                     product={product}
                                     index={index}

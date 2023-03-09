@@ -1,13 +1,13 @@
 import React,{useContext} from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import logo from './../../Image/logo.png'
+import logo from './../../../Image/logo.png'
 import Stack from '@mui/material/Stack'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
-import AuthContext from './../../context/AuthContext'
-import TemporaryBasketContext from './../../context/TemporaryBasketContext.js'
-import useHttp from './../../hooks/http.hook'
+import AuthContext from './../../../context/AuthContext'
+import TemporaryBasketContext from './../../../context/TemporaryBasketContext.js'
+import useHttp from './../../../hooks/http.hook'
 
 export default function ProductCard(props) {
     const {request} = useHttp()
@@ -15,13 +15,17 @@ export default function ProductCard(props) {
     const BasketContext = useContext(TemporaryBasketContext)
 
     const AddProductinBaset = async(id)=>{
+      try{
         if(ContextAuth.userId!==null){
-          await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id})
+          const data = await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id})
+          if(data.errors){props.setErrors(data.errors)}
+          if(data.message){props.setMessage(data.message)}
         }
         else{
           BasketContext.AddBasket(id)
         }
-      }
+      }catch(e){console.log('ProductCard AddProductinBaset', e)}  
+    }
 
     return(
             <Box key={props.index} sx={{ width: 250, height: 260, marginLeft:'5px',marginRight:'5px',borderRadius:'15px' ,boxShadow:3}}>

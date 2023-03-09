@@ -15,23 +15,32 @@ export default function Basket() {
     const BasketContext = useContext(TemporaryBasketContext)
     const [product, setProduct] = useState([])
     const [productListId, setProductListId] = useState([])
-    const [openCheckoutDialog, setOpenCheckoutDialog] = React.useState(false);
+    const [openCheckoutDialog, setOpenCheckoutDialog] = useState(false);
+    const [message, setMessage] = useState(null)
+    const [errors, setErrors] = useState(null)
 
-    const FetchBasketUnauthorizedUser=useCallback(async()=>{
-        let listProduct = []
-        for(let i=0;i<BasketContext.basket.length;i++){
-            const data = await request(`/catalog/${BasketContext.basket[i]}`,'GET')
-            listProduct.push(data)
-        }
-        setProduct(listProduct)
+
+    const FetchBasketUnauthorizedUser = useCallback(async()=>{
+        try{
+            let listProduct = []
+            for(let i=0;i<BasketContext.basket.length;i++){
+                const data = await request(`/catalog/${BasketContext.basket[i]}`,'GET')
+                if(data.errors){setErrors(data.errors)}
+                listProduct.push(data)
+            }
+            setProduct(listProduct)
+        }catch(e){console.log('Basket FetchBasketUnauthorizedUser', e)}    
     },[request, BasketContext.basket])
 
-    const FetchBasketAuthorizedUser=useCallback(async()=>{
-        const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
-        setProduct(data.basket)
-        for(let i=0;i<data.basket.length;i++){
-            setProductListId((prev)=>[...prev,data.basket[i]._id])
-        }
+    const FetchBasketAuthorizedUser = useCallback(async()=>{
+        try{
+            const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
+            if(data.errors){setErrors(data.errors)}
+            setProduct(data.basket)
+            for(let i=0;i<data.basket.length;i++){
+                setProductListId((prev)=>[...prev,data.basket[i]._id])
+            }
+        }catch(e){console.log('Basket FetchBasketAuthorizedUser', e)}    
     },[request,ContextAuth.userId])
 
     useEffect(()=>{
@@ -48,14 +57,14 @@ export default function Basket() {
         try{
             if(productListId.length===0 && BasketContext.basket.length===0){return;}
             if(!!ContextAuth.userId){
-                await request(
-                    '/order',
-                    'POST',
+                const data = await request('/order', 'POST',
                     {
                         userId:ContextAuth.userId,
                         listProducts:productListId,
                     }
                 )
+                if(data.errors){setErrors(data.errors)}
+                if(data.message){setMessage(data.message)}
                 setProduct([])
                 setProductListId([])
             }
@@ -75,11 +84,15 @@ export default function Basket() {
                 </Button>
             </Stack>
             <CheckoutDialog 
+                setErrors={setErrors}
+                setMessage={setMessage}
                 open={openCheckoutDialog} 
                 setOpen={setOpenCheckoutDialog}
                 setProduct={setProduct}
             />
             {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
+            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
+            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
             {loading?'loading':<TapeBasket productInBasket={product}/>}          
         </div>
     );
