@@ -22,6 +22,7 @@ export default function Regis() {
             auth.login(data.token, data._id)
             if(data.errors){setErrors(data.errors)}
             if(data.message){setMessage(data.message)}
+            setForm({email:'',password:'', fullname:''})
         }catch(e){console.log('Regis registerHander', e)}
     } 
 
@@ -45,6 +46,8 @@ export default function Regis() {
                 <FormAuth
                     formTitle={'Регистрация'}
                     textFields={TextFields}
+                    viewSelect={false}
+                    formValue={form}
                     onChangeTextFields={ChangeHandler}
                     buttononClick={registerHander}
                     buttonodisabled={loading}

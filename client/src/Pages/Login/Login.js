@@ -22,6 +22,7 @@ export default function Login() {
            auth.login(data.token, data._id)
            if(data.errors){setErrors(data.errors)}
            if(data.message){setMessage(data.message)}
+           setForm({email:'',password:''})
         }catch(e){console.log('Login loginHander', e)}
     }
 
@@ -44,6 +45,8 @@ export default function Login() {
                 <FormAuth
                     formTitle={'Авторизация'}
                     textFields={TextFields}
+                    viewSelect={false}
+                    formValue={form}
                     onChangeTextFields={ChangeHandler}
                     buttononClick={loginHander}
                     buttonodisabled={loading}

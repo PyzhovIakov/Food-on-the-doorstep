@@ -1,9 +1,12 @@
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function FormAuth(props){
-
     return (
         <Stack
             direction="column"
@@ -13,6 +16,24 @@ export default function FormAuth(props){
         >
             <h1>{props.formTitle}</h1>
             {
+                props.viewSelect?
+                        (<FormControl>
+                        <InputLabel id="demo-simple-select-label">Роль</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            label="Роль"
+                            name="role"
+                            value={props.formValue.role}
+                            onChange={props.onChangeTextFields}
+                        >
+                            <MenuItem value={'user'}>Клиент</MenuItem>
+                            <MenuItem value={'manager'}>Менеджер</MenuItem>
+                            <MenuItem value={'admin'}>Администратор</MenuItem>
+                        </Select>
+                    </FormControl>):null
+            }
+            {
                 props.textFields.map((textField, index)=>(
                     <TextField
                         required
@@ -21,6 +42,7 @@ export default function FormAuth(props){
                         label={textField.label}
                         type={textField.type}
                         name={textField.name}
+                        value={props.formValue[textField.name]}
                         onChange={props.onChangeTextFields}
                     />
                 ))
