@@ -41,7 +41,7 @@ export default function ProductCard(props) {
           clickBuyProduct={AddProductinBaset}
         />
         <Box key={props.index} sx={{ width: 250, height: 260, marginLeft:'5px',marginRight:'5px',borderRadius:'15px' ,boxShadow:3}}>
-            <img src={props.product.imageUrl?props.product.imageUrl:logo} width={'100%'} style={{borderRadius:'15px',maxHeight:'60%'}} alt={props.product.name}/>
+            <img src={props.product.imageUrl?'http://localhost:5000'+props.product.imageUrl:logo} width={'100%'} style={{borderRadius:'15px',maxHeight:'60%'}} alt={props.product.name}/>
             <h3 style={{padding:0,margin:'0 15px'}}>{props.product.name}</h3>
             <h3 style={{padding:0,margin:'0 15px'}}>Цена: {props.product.price}p</h3>
             <Stack direction="row"  justifyContent="space-around">

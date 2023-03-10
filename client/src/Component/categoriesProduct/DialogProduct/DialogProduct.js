@@ -35,7 +35,7 @@ export default function DialogProduct(props) {
         <DialogContent>
           <Stack  direction="row">
             <img 
-              src={props.product.imageUrl?props.product.imageUrl:logo} 
+              src={props.product.imageUrl?'http://localhost:5000'+props.product.imageUrl:logo} 
               height={'200px'}
               style={{borderRadius:'15px'}} 
               alt={props.product.name}
