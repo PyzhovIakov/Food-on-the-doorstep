@@ -24,14 +24,14 @@ function Carousel(props) {
 
     return (
         <div className="carousel-container">
-            <div className="carousel-wrapper">
+            <div className="carousel-wrapper" style={{height:props.cardHeight+'px'}}>
                  {  currentIndex > 0 && <button className="left-arrow" onClick={prev}>&lt;</button>}
                 <div className="carousel-content-wrapper"> 
-                    <div className="carousel-content" style={{ transform: `translateX(-${currentIndex * 265}px)` }}>
+                    <div className="carousel-content" style={{ transform: `translateX(-${currentIndex * props.cardLength}px)` }}>
                         {children}
                     </div>
                 </div>
-                {currentIndex <= (length - 6) && <button className="right-arrow" onClick={next}>&gt;</button>}
+                {currentIndex <= (length - Math.round(1300/props.cardLength)-1) && <button className="right-arrow" onClick={next}>&gt;</button>}
             </div>
         </div>
             
