@@ -6,7 +6,8 @@ const schema = new Schema({
     status:{type:String, required:true},
     fullname:{type:String, required:true},
     dateOrder:{type:Date, required:true},
-    dateDelivery:{type:Date, required:true}
+    dateDelivery:{type:Date, required:true},
+    deliveryAddress:{type:String, required:true}
 })
 
 module.exports = model('Order',schema)

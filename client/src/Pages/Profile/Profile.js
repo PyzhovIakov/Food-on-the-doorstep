@@ -4,13 +4,10 @@ import Alert from '@mui/material/Alert'
 import AuthContext from './../../context/AuthContext'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 import logo from './../../Image/logo.png'
-import Avatar from '@mui/material/Avatar';
+import Avatar from '@mui/material/Avatar'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
-import IconButton from '@mui/material/IconButton'
-
-
 
 export default function Profile() {
     const {loading,request,error,ClearError} = useHttp()
@@ -62,6 +59,7 @@ export default function Profile() {
                         <Stack direction="column" justifyContent="flex-start" alignItems="stretch" spacing={2}>
                             <h2>{user.fullname}</h2>
                             <h3>{user.email}</h3>
+                            <h3>Прошлый адрес доставки:{user.deliveryAddress?user.deliveryAddress:'нет'}</h3>
                         </Stack>
                     </Stack>
                 </Box>

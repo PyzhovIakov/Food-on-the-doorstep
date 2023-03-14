@@ -52,29 +52,9 @@ export default function Basket() {
         }
       },[ContextAuth.userId])
 
-
     const CheckoutUser = async() =>{
-        try{
-            
-            if(productListId.length===0 && BasketContext.basket.length===0){return;}
-            if(!!ContextAuth.userId){
-                const data = await request('/order', 'POST',
-                    {
-                        userId:ContextAuth.userId,
-                        listProducts:productListId,
-                    }
-                )
-                if(data.errors){setErrors(data.errors)}
-                if(data.message){setMessage(data.message)}
-                setProduct([])
-                setProductListId([])
-                ContextAuth.updateUserBasket(ContextAuth.userId)
-            }
-            else{
-                setOpenCheckoutDialog(true);
-            }
-            
-         }catch(e){console.log('Basket CheckoutUser', e)}
+        if(productListId.length===0 && BasketContext.basket.length===0){return;}
+        setOpenCheckoutDialog(true);
     }
 
     return (
@@ -91,6 +71,8 @@ export default function Basket() {
                 open={openCheckoutDialog} 
                 setOpen={setOpenCheckoutDialog}
                 setProduct={setProduct}
+                productListId={productListId}
+                setProductListId={setProductListId}
             />
             {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
             {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
