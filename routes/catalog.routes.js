@@ -1,5 +1,5 @@
 const {Router} = require('express')
-const {validationResult}=require('express-validator')
+const {check,validationResult}=require('express-validator')
 const {productValidation} = require('./../check/checkCatalog')
 const Catalog = require('./../models/Catalog')
 const router=Router()
@@ -62,6 +62,30 @@ router.get('/:id', async(req,res)=>{
         }
 
         res.json(product)
+    }
+    catch(e){
+        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+    }
+})
+
+router.patch('/:id',[check('isStopped','Ошибка блокировки').isBoolean()], async(req,res)=>{
+    try
+    {
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(400).json({errors:errors.array()})
+        }
+
+        const productId = req.params.id
+        const product = await Catalog.findById(productId)
+        if(!product){
+            return res.status(404).json({errors:'Такого продукта нет'})
+        }
+
+        await Catalog.updateOne({_id:productId},{
+            isStopped:req.body.isStopped
+        })
+        res.json({message:"Успешно"})
     }
     catch(e){
         res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})

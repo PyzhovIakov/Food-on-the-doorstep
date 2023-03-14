@@ -21,10 +21,9 @@ export default function Catalog() {
         setProduct(data)
         if(data.errors){setErrors(data.errors)}
       }catch(e){console.log('Catalog useEffect Fetchdata', e)}
-      
     }
     Fetchdata()
-  },[request])
+  },[request, message])
 
    
 

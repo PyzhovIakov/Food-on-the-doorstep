@@ -36,6 +36,14 @@ export default function ProductCard(props) {
       }catch(e){console.log('ProductCard AddProductinBaset', e)}  
     }
 
+    const HandlerProductRelease = async(id, FlagStop) =>{
+      try{
+        const data = await request(`/catalog/${id}`,'PATCH',{isStopped:FlagStop})
+        if(data.errors){props.setErrors(data.errors)}
+        if(data.message){props.setMessage(data.message)}
+      }catch(e){console.log('ProductCard HandlerProductRelease', e)}  
+    }
+
     return(
       <>
         <DialogProduct 
@@ -52,7 +60,12 @@ export default function ProductCard(props) {
               {
                 ContextAuth.role==='manager'?(
                   <>
-                    <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
+                    <Button 
+                      onClick={()=>HandlerProductRelease(props.product._id, !props.product.isStopped)}
+                      variant="contained" 
+                      color={props.product.isStopped? 'error':'success'}
+                      sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}
+                    >
                       {props.product.isStopped? <DangerousIcon/>:<TaskAltIcon/>}
                     </Button>
                     <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
