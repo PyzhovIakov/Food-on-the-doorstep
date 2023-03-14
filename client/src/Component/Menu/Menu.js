@@ -54,7 +54,7 @@ function Menu() {
                     ))
                 }
                 {
-                    (auth.role!=='manager' || auth.role!=='admin')? 
+                    (auth.role==='user' || auth.role===null)? 
                         <Link to={'/basket'} style={{margin:'0 8px', textDecoration: 'none'}}>
                             <Badge 
                                 color="success" 

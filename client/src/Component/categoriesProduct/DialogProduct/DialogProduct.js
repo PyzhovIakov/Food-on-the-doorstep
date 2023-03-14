@@ -53,7 +53,7 @@ export default function DialogProduct(props) {
         </DialogContent>
         <DialogActions>
             <Button onClick={handleClose}>Отмена</Button>
-            <Button onClick={AddProductinBaset}>Купить</Button>
+            <Button disabled={props.product.isStopped} onClick={AddProductinBaset}>Купить</Button>
         </DialogActions>
       </Dialog>
     </div>

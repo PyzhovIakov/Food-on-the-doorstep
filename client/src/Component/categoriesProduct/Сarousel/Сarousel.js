@@ -29,7 +29,7 @@ function Carousel(props) {
         <div className="carousel-container">
             <div className="carousel-wrapper" style={{height:props.cardHeight+'px'}}>
                  {  currentIndex > 0 && (
-                 <Button variant="contained" color="success" sx={{borderRadius:'100%'}} className={'left-arrow'} onClick={prev}>
+                 <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px 20px', minWidth:0}} className={'left-arrow'} onClick={prev}>
                     <ArrowBackIosNewIcon fontSize="large"/>
                 </Button>)}
                 <div className="carousel-content-wrapper"> 
@@ -39,7 +39,7 @@ function Carousel(props) {
                 </div>
                 {currentIndex <= (length - Math.round(1300/props.cardLength)-1) && 
                 (
-                <Button variant="contained" color="success" sx={{borderRadius:'100%'}} className={'right-arrow '} onClick={next}>
+                <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px 20px', minWidth:0}} className={'right-arrow '} onClick={next}>
                     <ArrowForwardIosIcon fontSize="large"/>
                 </Button>
                 )}

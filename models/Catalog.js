@@ -7,6 +7,7 @@ const schema = new Schema({
     price:{type:Number, required:true},
     description:{type:String, required:true},
     imageUrl:{type:String},
+    isStopped:{type:Boolean, required:true}
 })
 
 module.exports = model('Catalog',schema)

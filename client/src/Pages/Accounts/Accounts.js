@@ -48,7 +48,7 @@ export default function Accounts() {
                     onChangeTextFields={ChangeHandler}
                     buttononClick={registerHander}
                     buttonodisabled={loading}
-                    buttonTitle={'Зарегистрироваться'}
+                    buttonTitle={'Зарегистрировать'}
                 />
             </Stack>
         </div>
