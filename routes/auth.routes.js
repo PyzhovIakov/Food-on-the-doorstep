@@ -83,7 +83,7 @@ router.get('/:id', async(req,res)=>{
     try
     {
         const userId = req.params.id
-        const user = await User.findById(userId).populate('basket')
+        const user = await User.findById(userId).populate('basket.productId')
         if(!user){
             return res.status(404).json({errors:'Пользователь не найден'})
         }

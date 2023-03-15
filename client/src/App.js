@@ -7,13 +7,13 @@ import useBasket from './hooks/basket.hook'
 
 function App() {
   const {login,logout,CheckingAuthorizedUser,updateUserBasket, token,userId,role,userBasket} = useAuth()
-  const {basket,AddBasket,DeleteBasket} = useBasket()
+  const {basket,AddBasket,DeleteBasket,DecrementBasket} = useBasket()
   const isAuth=!!role
 
   return (
    
     <AuthContext.Provider value={{token,userId,role,userBasket,updateUserBasket,login,logout,CheckingAuthorizedUser,isAuth}}>
-      <TemporaryBasketContext.Provider value={{basket,AddBasket,DeleteBasket}}>
+      <TemporaryBasketContext.Provider value={{basket,AddBasket,DeleteBasket,DecrementBasket}}>
         <div>
           <Navigation/>
         </div>

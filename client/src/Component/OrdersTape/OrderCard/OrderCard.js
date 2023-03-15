@@ -6,6 +6,8 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
+import SearchIcon from '@mui/icons-material/Search'
+import DeleteIcon from '@mui/icons-material/Delete'
 import useHttp from '../../../hooks/http.hook'
 
 export default function OrderCard(props) {
@@ -78,8 +80,12 @@ export default function OrderCard(props) {
             </Stack>
             <Stack direction="row" spacing={2}  alignItems="center" sx={{marginRight:'10px'}}>
                 <Button onClick={saveChanges} size="small" variant="contained" color="success" sx={{borderRadius:'15px'}}>Сохранить</Button>
-                <Button size="small" variant="contained" color="success" sx={{borderRadius:'15px'}}>Просмотреть</Button>
-                <Button size="small" variant="contained" color="success" sx={{borderRadius:'15px'}}>Удалить</Button>
+                <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
+                    <SearchIcon/>
+                </Button>
+                <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
+                    <DeleteIcon/>
+                </Button>
             </Stack>
         </Stack>
     )

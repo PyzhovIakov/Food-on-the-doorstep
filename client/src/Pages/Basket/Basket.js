@@ -19,14 +19,13 @@ export default function Basket() {
     const [message, setMessage] = useState(null)
     const [errors, setErrors] = useState(null)
 
-
     const FetchBasketUnauthorizedUser = useCallback(async()=>{
         try{
             let listProduct = []
             for(let i=0;i<BasketContext.basket.length;i++){
-                const data = await request(`/catalog/${BasketContext.basket[i]}`,'GET')
+                const data = await request(`/catalog/${BasketContext.basket[i].id}`,'GET')
                 if(data.errors){setErrors(data.errors)}
-                listProduct.push(data)
+                listProduct.push({...data, count:BasketContext.basket[i].count})
             }
             setProduct(listProduct)
         }catch(e){console.log('Basket FetchBasketUnauthorizedUser', e)}    
@@ -36,26 +35,52 @@ export default function Basket() {
         try{
             const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
             if(data.errors){setErrors(data.errors)}
-            setProduct(data.basket)
+            setProduct([])
+            setProductListId([])
             for(let i=0;i<data.basket.length;i++){
-                setProductListId((prev)=>[...prev,data.basket[i]._id])
+                setProductListId((prev)=>[...prev,data.basket[i].productId._id])
+                setProduct((prev)=>[...prev,{...data.basket[i].productId, count:data.basket[i].count}])
             }
         }catch(e){console.log('Basket FetchBasketAuthorizedUser', e)}    
     },[request,ContextAuth.userId])
 
-    useEffect(()=>{
+    const ViewProduct = () => {
         ContextAuth.CheckingAuthorizedUser()
         if(!!ContextAuth.userId){
             FetchBasketAuthorizedUser()
         }else{
             FetchBasketUnauthorizedUser()
         }
-      },[ContextAuth.userId])
+    }
+
+    useEffect(()=>{
+        ViewProduct()
+      },[])
 
     const CheckoutUser = async() =>{
         if(productListId.length===0 && BasketContext.basket.length===0){return;}
         setOpenCheckoutDialog(true);
     }
+
+    const Increment = useCallback(async(id) => {
+        if(!!ContextAuth.userId){
+            const  data =  await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id,type:'Increment'})
+            if(data.errors){setErrors(data.errors)}
+        }else{
+            BasketContext.AddBasket(id)
+        }
+        ViewProduct()
+    },[])
+
+    const Decrement = useCallback(async(id) => {
+         if(!!ContextAuth.userId){
+            const  data =  await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id,type:'Decrement'})
+            if(data.errors){setErrors(data.errors)}
+        }else{
+            BasketContext.DecrementBasket(id)
+        }
+        ViewProduct()
+    },[])
 
     return (
         <div>
@@ -77,7 +102,7 @@ export default function Basket() {
             {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
             {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
             {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
-            {loading?'loading':<TapeBasket productInBasket={product}/>}          
+            {loading?'loading':<TapeBasket productInBasket={product} Increment={Increment} Decrement={Decrement}/>}          
         </div>
     );
 }

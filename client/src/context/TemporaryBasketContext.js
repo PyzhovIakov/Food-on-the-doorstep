@@ -4,7 +4,9 @@ function noop(){}
 
 const TemporaryBasketContext = createContext({
     basket:[],
-    AddBasket:noop
+    AddBasket:noop,
+    DeleteBasket:noop,
+    DecrementBasket:noop,
 })
 
 export default TemporaryBasketContext

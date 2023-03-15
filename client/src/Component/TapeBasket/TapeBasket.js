@@ -2,12 +2,11 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
+import AddIcon from '@mui/icons-material/Add'
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule'
 import logo from './../../Image/logo.png'
-
 export default function TapeBasket(props) {
-
-
-
+    
     return(
         <Box sx={{ width:'95%', marginLeft:'auto',marginRight:'auto'}}>
             {
@@ -29,6 +28,15 @@ export default function TapeBasket(props) {
                             </Stack>
                         </Stack>
                         <Stack direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{margin:'0 20px'}}>
+                            <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{border:'2px solid',borderColor: 'success.main', borderRadius:'50px'}}>
+                                <Button onClick={()=>{props.Increment(product._id)}} variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'5px', minWidth:0}}>
+                                    <AddIcon/>
+                                </Button>
+                                <h3>{product.count}</h3>
+                                <Button onClick={()=>{props.Decrement(product._id)}} variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'5px', minWidth:0}}>
+                                    <HorizontalRuleIcon/>
+                                </Button>
+                            </Stack>
                             <Button variant="contained" color="success" sx={{borderRadius:'15px'}}>
                                 Удалить        
                             </Button>
