@@ -53,7 +53,7 @@ export default function ProductCard(props) {
             <h3 style={{padding:0,margin:'0 15px'}}>Цена: {props.product.price}p</h3>
             <Stack direction="row"  justifyContent="space-around">
               {
-                ContextAuth.role==='manager'?(
+                ContextAuth.role==='manager'?
                   <>
                     <Button 
                       onClick={()=>props.HandlerProductRelease(props.product._id, !props.product.isStopped)}
@@ -66,11 +66,10 @@ export default function ProductCard(props) {
                     <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
                       <EditIcon/>
                     </Button>
-                    <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
+                    <Button onClick={()=>props.DeleteProduct(props.product._id)} variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
                       <DeleteIcon/>
                     </Button>
-                </>
-                ):null
+                </>:null
               }
               {
                 (ContextAuth.role==='user' || ContextAuth.role===null)?(

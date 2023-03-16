@@ -92,4 +92,26 @@ router.patch('/:id',[check('isStopped','Ошибка блокировки').isBo
     }
 })
 
+router.delete('/:id', async(req,res)=>{
+    try
+    {
+        const productId = req.params.id
+        
+        await Catalog.findOneAndDelete({_id:productId},(err,doc)=>{
+            if(err){
+                res.json({error:"Ошибка"})
+            }
+
+            if(!doc){
+                res.json({error:"Продукт не найден"})
+            }
+
+            res.json({message:"Успешно"})
+        })
+       
+    }
+    catch(e){
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
+    }
+})
 module.exports=router

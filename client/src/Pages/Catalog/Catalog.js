@@ -27,6 +27,12 @@ export default function Catalog() {
     }catch(e){console.log('Catalog HandlerProductRelease', e)}  
   }
 
+  const DeleteProduct = async(id)=>{
+    try{
+      await request(`/catalog/${id}`,'DELETE')
+      fetchDataCatalog()
+    }catch(e){console.log('Catalog DeleteProduct', e)}  
+  }
 
   useEffect(()=>{
     fetchDataCatalog()
@@ -45,7 +51,11 @@ export default function Catalog() {
           </Button>
           :null
       }
-      {loading? <LinearProgress color="success" />:<CategoriesProduct product={product} HandlerProductRelease={HandlerProductRelease}/>}     
+      {
+        loading? 
+          <LinearProgress color="success" />:
+          <CategoriesProduct product={product} DeleteProduct={DeleteProduct} HandlerProductRelease={HandlerProductRelease}/>
+      }     
     </div>
   );
 }
