@@ -1,32 +1,49 @@
 import React,{useState,useEffect} from 'react'
 import useHttp from './../../hooks/http.hook.js'
-import Alert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert'
+import LinearProgress from '@mui/material/LinearProgress'
 import OrdersTape from './../../Component/OrdersTape/OrdersTape'
 
 export default function Orders() {
-    const {loading,request,error,ClearError} = useHttp()
+    const {loading,request,error,message,ClearError,ClearMessage} = useHttp()
     const [orders, setOrders] = useState([])
-    const [errors, setErrors] = useState(null)
-    const [message, setMessage] = useState(null)
+
+    const fetchDataOrders = async() => {
+        try{
+            const data =await request('/order','GET')
+            setOrders(data)
+        }catch(e){console.log('Orders fetchDataOrders', e)}
+    }
+
+    const saveChanges = async(id,formOrderCard) =>{
+        try{
+            await request(
+                `/order/${id}`,
+                'PATCH',
+                {
+                    status:formOrderCard.status,
+                    dateDelivery:formOrderCard.datetime,
+                }
+            )
+            fetchDataOrders()
+         }catch(e){console.log('Orders saveChanges',e)}
+    }
 
     useEffect(()=>{
-        async function Fetchdata(){
-            try{
-                const data =await request('/order','GET')
-                setOrders(data)
-                if(data.errors){setErrors(data.errors)}
-            }catch(e){console.log('Orders useEffect Fetchdata', e)}
-        }
-        Fetchdata()
-    },[request])
+        fetchDataOrders()
+    },[])
+
+    
+    setInterval(() => {fetchDataOrders()}, 3000000)
+    if(error){setTimeout(() => ClearError(), 6000)}
+    if(message){setTimeout(() => ClearMessage(), 6000)}
 
     return (
         <div>
             <h1>Заказы</h1>
-            {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
-            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
-            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
-            {loading?null:<OrdersTape setMessage={setMessage} setErrors={setErrors} orders={orders}/>}
+            {error?<Alert severity="warning" onClose={ClearError}>{error}</Alert>:null}
+            {message?<Alert severity="info" onClose={ClearMessage}>{message}</Alert>:null}
+            {loading?<LinearProgress color="success" />:<OrdersTape saveChanges={saveChanges} orders={orders}/>}
         </div>
     );
 }

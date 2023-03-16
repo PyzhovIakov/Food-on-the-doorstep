@@ -17,7 +17,7 @@ export default function DialogProduct(props) {
   };
 
   const AddProductinBaset = () => {
-      props.clickBuyProduct(props.product._id) 
+      props.clickBuyProduct(props.product) 
       props.setOpen(false)
   }
 

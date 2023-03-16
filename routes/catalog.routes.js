@@ -12,7 +12,7 @@ router.post(
         try{    
             const errors = validationResult(req)
             if(!errors.isEmpty()){
-                return res.status(400).json({errors:errors.array()})
+                return res.status(400).json({error:errors.array()})
             }
             
             const doc = new Catalog({
@@ -27,7 +27,7 @@ router.post(
 
             res.json({message:'Успешно'})
         }catch(e){
-            res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+            res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
         }
     }
 )
@@ -48,7 +48,7 @@ router.get('', async(req,res)=>{
         res.json(newData)
     }
     catch(e){
-        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 
@@ -58,13 +58,13 @@ router.get('/:id', async(req,res)=>{
         const productId = req.params.id
         const product = await Catalog.findById(productId)
         if(!product){
-            return res.status(404).json({errors:'Продукт не найден'})
+            return res.status(404).json({error:'Продукт не найден'})
         }
 
         res.json(product)
     }
     catch(e){
-        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 
@@ -79,7 +79,7 @@ router.patch('/:id',[check('isStopped','Ошибка блокировки').isBo
         const productId = req.params.id
         const product = await Catalog.findById(productId)
         if(!product){
-            return res.status(404).json({errors:'Такого продукта нет'})
+            return res.status(404).json({error:'Такого продукта нет'})
         }
 
         await Catalog.updateOne({_id:productId},{
@@ -88,7 +88,7 @@ router.patch('/:id',[check('isStopped','Ошибка блокировки').isBo
         res.json({message:"Успешно"})
     }
     catch(e){
-        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 

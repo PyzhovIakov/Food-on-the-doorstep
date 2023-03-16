@@ -11,36 +11,20 @@ import DangerousIcon from '@mui/icons-material/Dangerous'
 import TaskAltIcon from '@mui/icons-material/TaskAlt'
 import AuthContext from './../../../context/AuthContext'
 import TemporaryBasketContext from './../../../context/TemporaryBasketContext.js'
-import useHttp from './../../../hooks/http.hook'
 import DialogProduct from './../DialogProduct/DialogProduct'
 
 export default function ProductCard(props) {
-    const {request} = useHttp()
     const ContextAuth = useContext(AuthContext)
     const BasketContext = useContext(TemporaryBasketContext)
     const [openDialogProduct , seOpenDialogProduct] = useState(false)
 
-    const AddProductinBaset = async(id)=>{
-      try{
-        if(ContextAuth.userId!==null){
-          const data = await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id, type:'Increment'})
-          if(data.errors){props.setErrors(data.errors)}
-          if(data.message){props.setMessage(data.message)}
-          ContextAuth.updateUserBasket(ContextAuth.userId)
-        }
-        else{
-          const data = BasketContext.AddBasket(id)
-          if(data.message){props.setMessage(data.message)}
-          if(data.errors){props.setErrors(data.errors)}
-        }
-      }catch(e){console.log('ProductCard AddProductinBaset', e)}  
+    const AddProductinBaset = (product)=>{
+      BasketContext.AddBasket(product)
     }
 
     const HandlerProductRelease = async(id, FlagStop) =>{
       try{
-        const data = await request(`/catalog/${id}`,'PATCH',{isStopped:FlagStop})
-        if(data.errors){props.setErrors(data.errors)}
-        if(data.message){props.setMessage(data.message)}
+        await props.request(`/catalog/${id}`,'PATCH',{isStopped:FlagStop})
       }catch(e){console.log('ProductCard HandlerProductRelease', e)}  
     }
 
@@ -79,7 +63,7 @@ export default function ProductCard(props) {
               }
               {
                 (ContextAuth.role==='user' || ContextAuth.role===null)?(
-                  <Button variant="contained" disabled={props.product.isStopped} onClick={()=>AddProductinBaset(props.product._id)} color="success" sx={{borderRadius:'15px'}} startIcon={<AddShoppingCartIcon/>}>
+                  <Button variant="contained" disabled={props.product.isStopped} onClick={()=>AddProductinBaset(props.product)} color="success" sx={{borderRadius:'15px'}} startIcon={<AddShoppingCartIcon/>}>
                     Купить
                   </Button>
                 ):null

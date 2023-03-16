@@ -7,20 +7,10 @@ const useAuth = () => {
     const [userId, setUserId] = useState(null)
     const [role, setRole] = useState(null)
     const {request} = useHttp()
-    const [userBasket, setUserBasket] = useState([])
-
-    const updateUserBasket = useCallback(async(userId)=>{
-        try{
-            const user = await request('/auth/'+userId, 'GET')
-            if(user.basket){setUserBasket(user.basket)}
-        }catch(e){console.log('useAuth updateUserBasket', e)}     
-    },[request])
-
 
     const roleDefinition = useCallback(async(userId)=>{
         try{
             const user = await request('/auth/'+userId, 'GET')
-            if(user.basket){setUserBasket(user.basket)}
             if(user.role){setRole(user.role)}
             else{setRole(null)}
         }catch(e){console.log('useAuth roleDefinition', e)}     
@@ -37,7 +27,6 @@ const useAuth = () => {
         setToken(null)
         setUserId(null)
         setRole(null)
-        setUserBasket([])
         localStorage.removeItem(StorageName)
     }, [])
 
@@ -46,7 +35,6 @@ const useAuth = () => {
         if(data && data.token){
             login(data.token, data.userId)
             roleDefinition(data.userId)
-            
         }
     }, [login,roleDefinition])
 
@@ -54,6 +42,6 @@ const useAuth = () => {
         CheckingAuthorizedUser()      
     },[])
 
-    return {login,logout,CheckingAuthorizedUser,updateUserBasket,token,userId,role,userBasket}
+    return {login,logout,CheckingAuthorizedUser,token,userId,role}
 }
 export default useAuth

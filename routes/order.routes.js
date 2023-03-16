@@ -9,7 +9,7 @@ const router=Router()
 router.get('', async(req,res)=>{
     try
     {
-        const order = await Order.find().populate('listProducts').populate('userId')
+        const order = await Order.find().populate('listProducts.product').populate('userId')
         
         res.json(order)
     }
@@ -23,7 +23,7 @@ router.post( '', [check('deliveryAddress','Введите адрес').exists()]
         try{    
             const errors = validationResult(req)
             if(!errors.isEmpty()){
-                return res.status(400).json({errors:errors.array()})
+                return res.status(400).json({error:errors.array()})
             }
 
             const userId = req.body.userId
@@ -45,9 +45,14 @@ router.post( '', [check('deliveryAddress','Введите адрес').exists()]
             const dateDelivery = new Date()   
             dateDelivery.setHours(dateDelivery.getHours()+6)
             
+            const listProducts = []
+            for(let i=0;i<req.body.listProducts.length;i++){
+                listProducts.push({product:req.body.listProducts[i].product._id,count:req.body.listProducts[i].count})
+            }
+
             const doc = new Order({
                 userId:req.body.userId,
-                listProducts:req.body.listProducts,
+                listProducts:listProducts,
                 status:"Новый",
                 fullname:fullname,
                 dateOrder:dateOrder,
@@ -59,7 +64,7 @@ router.post( '', [check('deliveryAddress','Введите адрес').exists()]
 
             res.json({message:'Успешно'})
         }catch(e){
-            res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+            res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
         }
     }
 )
@@ -69,13 +74,13 @@ router.patch('/:id',orderUpdateCheck, async(req,res)=>{
     {
         const errors = validationResult(req)
         if(!errors.isEmpty()){
-            return res.status(400).json({errors:errors.array()})
+            return res.status(400).json({error:errors.array()})
         }
 
         const orderId = req.params.id
         const order = await Order.findById(orderId)
         if(!order){
-            return res.status(404).json({errors:'Такого заказа нет'})
+            return res.status(404).json({error:'Такого заказа нет'})
         }
 
         await Order.updateOne({_id:orderId},{
@@ -86,7 +91,7 @@ router.patch('/:id',orderUpdateCheck, async(req,res)=>{
 
     }
     catch(e){
-        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 

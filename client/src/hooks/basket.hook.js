@@ -1,54 +1,87 @@
-import {useState,useCallback,useEffect} from 'react'
+import {useState,useCallback,useEffect,useContext} from 'react'
+import useHttp from './http.hook'
+import AuthContext from './../context/AuthContext'
+
 const StorageName = 'BasketData'
 
 const useBasket = () => {
+    const {request} = useHttp()
+    const ContextAuth = useContext(AuthContext)
     const [basket, setBasket] = useState([])
 
-    const AddBasket = (id) => {
-       let FlagAdd=false
+    const AddBasket = (product) => {
+        let FlagUpdate=false
         for(let i=0;i<basket.length;i++){
-            if(basket[i].id===id){
+            if(basket[i].product._id===product._id){
                 let prevBasket = basket
                 prevBasket[i].count += 1
                 setBasket(prevBasket)
                 localStorage.setItem(StorageName,JSON.stringify({basket:basket}))
-                FlagAdd=true
-                return{message:"Такой товар уже в корзине"}
+                FlagUpdate=true
             }
         }
-        if(!FlagAdd){
-            setBasket((prevBasket)=>[...prevBasket, {id:id, count:1}])
+        if(!FlagUpdate){
+            setBasket((prevBasket)=>[...prevBasket, {product:product, count:1}])
             localStorage.setItem(StorageName,JSON.stringify({basket:basket}))
-            return {message:"Товар добавлен в корзину"}
         }
     }
 
-    const DecrementBasket = (id) => {
-         for(let i=0;i<basket.length;i++){
-             if(basket[i].id===id){
+    const DecrementBasket = (product) => {
+        for(let i=0;i<basket.length;i++){
+            if(basket[i].product._id===product._id){
                 let prevBasket = basket
                 prevBasket[i].count -= 1
                 setBasket(prevBasket)
                 localStorage.setItem(StorageName,JSON.stringify({basket:basket}))
-                return{message:"Такой товар уже в корзине"}
-             }
-         }
-     }
+            }
+        }
+    }
+    
+    const IncrementBasket = (product) => {
+        for(let i=0;i<basket.length;i++){
+            if(basket[i].product._id===product._id){
+                let prevBasket = basket
+                prevBasket[i].count += 1
+                setBasket(prevBasket)
+                localStorage.setItem(StorageName,JSON.stringify({basket:basket}))
+            }
+        }
+    }
     
     const DeleteBasket = useCallback(()=>{
         setBasket([])
         localStorage.removeItem(StorageName)
     }, [])
 
-   useEffect(()=>{
+    const UpdateUserBasket = async() =>{
+        try{
+            if(ContextAuth.userId!==null){
+                await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:basket})
+            }
+        }catch(e){console.log('useBasket UpdateUserBasket',e)}
        
-        const data  = JSON.parse(localStorage.getItem(StorageName))
-        if(data && data.basket){
-            setBasket(data.basket)
+    }
+
+   useEffect(()=>{
+        if(ContextAuth.userId!==null){
+            (async function(){
+                const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
+                const newbasket = basket.concat(data.basket)
+                setBasket(newbasket)
+            }())
+            localStorage.setItem(StorageName,JSON.stringify({basket:basket}))         
         }
+        else{
+            const data  = JSON.parse(localStorage.getItem(StorageName))
+            if(data && data.basket){
+                const newbasket = basket.concat(data.basket)
+                setBasket(newbasket)
+            }
+        }
+        
     },[])
 
 
-    return{basket,AddBasket,DeleteBasket,DecrementBasket}
+    return{basket,AddBasket,DeleteBasket,DecrementBasket,IncrementBasket,UpdateUserBasket}
 }
 export default useBasket

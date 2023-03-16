@@ -7,6 +7,8 @@ const TemporaryBasketContext = createContext({
     AddBasket:noop,
     DeleteBasket:noop,
     DecrementBasket:noop,
+    IncrementBasket:noop,
+    UpdateUserBasket:noop
 })
 
 export default TemporaryBasketContext

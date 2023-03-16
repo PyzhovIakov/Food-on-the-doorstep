@@ -2,36 +2,34 @@ import React,{useEffect,useState, useContext} from 'react'
 import useHttp from './../../hooks/http.hook.js'
 import CategoriesProduct from './../../Component/categoriesProduct/categoriesProduct'
 import AuthContext from './../../context/AuthContext'
-import Alert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/Add'
+import LinearProgress from '@mui/material/LinearProgress'
 
 export default function Catalog() {
   const {loading,request,error,ClearError} = useHttp()
   const ContextAuth = useContext(AuthContext)
   const [product, setProduct] = useState({})
-  const [errors, setErrors] = useState(null)
-  const [message, setMessage] = useState(null)
+
+  const fetchDataCatalog = async() =>{
+    try{
+      setProduct({})
+      const data = await request('/catalog','GET')
+      setProduct(data)
+    }catch(e){console.log('Catalog fetchDataCatalog', e)}
+  }
 
   useEffect(()=>{
-    async function Fetchdata(){
-      try
-      {
-        const data =await request('/catalog','GET')
-        setProduct(data)
-        if(data.errors){setErrors(data.errors)}
-      }catch(e){console.log('Catalog useEffect Fetchdata', e)}
-    }
-    Fetchdata()
-  },[request, message])
+    fetchDataCatalog()
+  },[request])
 
-   
+  setInterval(() => {fetchDataCatalog()}, 3000000)
+  if(error){setTimeout(() => ClearError(), 6000)}
 
   return (
     <div>
-      {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
-      {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
-      {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
+      {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
       {
         ContextAuth.role==='manager'? 
           <Button variant="contained" color="success" sx={{borderRadius:'15px', m:'20px 5px'}} startIcon={<AddIcon/>}>
@@ -39,7 +37,7 @@ export default function Catalog() {
           </Button>
           :null
       }
-      {loading?null:<CategoriesProduct setErrors={setErrors} setMessage={setMessage} product={product}/>}     
+      {loading? <LinearProgress color="success" />:<CategoriesProduct product={product} request={request}/>}     
     </div>
   );
 }

@@ -3,6 +3,7 @@ import  {useState, useCallback} from 'react'
 const useHttp = ()=>{
     const [loading,setLoading] = useState(false)
     const [error,setError]=useState(null)
+    const [message,setMessage]=useState(null)
 
     const request = useCallback(async (url,method='GET',body=null,headers={})=>{
         try{
@@ -15,9 +16,11 @@ const useHttp = ()=>{
             const data = await response.json()
 
             if(!response.ok){
-                throw new Error(data.errors || 'Что-то пошло не так.')
+                setError(data.error || 'Что-то пошло не так.')
             }
-            
+            if(data.error){setError(data.error)}
+            if(data.message){setMessage(data.message)}
+
             setLoading(false)
             return data
         }catch(e){
@@ -28,8 +31,8 @@ const useHttp = ()=>{
     },[])
 
     const ClearError = ()=>setError(null)
-    
+    const ClearMessage = ()=>setMessage(null)
 
-    return {loading,request,error,ClearError}
+    return {loading,request,error,message,ClearError,ClearMessage}
 }
 export default useHttp

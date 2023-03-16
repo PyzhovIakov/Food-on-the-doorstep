@@ -6,7 +6,7 @@ const schema = new Schema({
     fullname:{type:String, required:true},
     role:{type:String, required:true},
     basket:[{
-        productId:{type:Types.ObjectId, ref:'Catalog'},
+        product:{type:Types.ObjectId, ref:'Catalog'},
         count:{type:Number, required:true}
     }],
     deliveryAddress:{type:String}

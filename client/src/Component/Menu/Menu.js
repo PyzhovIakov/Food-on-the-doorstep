@@ -10,14 +10,18 @@ import MenuUserRoleController from './MenuUserRoleController'
 import logo from './../../Image/logo.png'
 
 function Menu() {
-    const auth = useContext(AuthContext)
-    const basketContext = useContext(TemporaryBasketContext)
+    const ContextAuth = useContext(AuthContext)
+    const BasketContext = useContext(TemporaryBasketContext)
     const [Links, setLinks] = useState([])
 
     useEffect(()=>{
-        if(auth.userId!==null){ auth.updateUserBasket(auth.userId)}
-        setLinks(MenuUserRoleController(auth.role))
-    },[auth.role,auth.userId])
+        setLinks(MenuUserRoleController(ContextAuth.role))
+    },[ContextAuth.role])
+
+    const  ExitAccountUser = () =>{
+        BasketContext.UpdateUserBasket()
+        ContextAuth.logout()
+    }
 
     return(
         <Stack
@@ -54,11 +58,11 @@ function Menu() {
                     ))
                 }
                 {
-                    (auth.role==='user' || auth.role===null)? 
+                    (ContextAuth.role==='user' || ContextAuth.role===null)? 
                         <Link to={'/basket'} style={{margin:'0 8px', textDecoration: 'none'}}>
                             <Badge 
                                 color="success" 
-                                badgeContent={auth.isAuth?auth.userBasket.length:basketContext.basket.length} 
+                                badgeContent={BasketContext.basket.length} 
                                 anchorOrigin={{
                                     vertical: 'top',
                                     horizontal: 'left',
@@ -72,13 +76,13 @@ function Menu() {
                         :null
                 }
                 {
-                    auth.isAuth?
+                    ContextAuth.isAuth?
                     <>
                         <Link to={'/profile'} style={{margin:5, textDecoration: 'none'}}>
                             <Button variant="contained" size="large" color="success">Профиль</Button>
                         </Link>
                         <Link to={'/'} style={{margin:5, textDecoration: 'none'}}>
-                            <Button variant="contained" size="large" onClick={auth.logout} color="success" endIcon={<LogoutIcon />}>Выход</Button>
+                            <Button variant="contained" size="large" onClick={ExitAccountUser} color="success" endIcon={<LogoutIcon />}>Выход</Button>
                         </Link>
                     </>
                     :null

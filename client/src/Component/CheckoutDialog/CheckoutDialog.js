@@ -8,11 +8,9 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TemporaryBasketContext from './../../context/TemporaryBasketContext'
 import AuthContext from './../../context/AuthContext'
-import useHttp from './../../hooks/http.hook'
 import AutocompleteDeliveryAddress from './../AutocompleteDeliveryAddress/AutocompleteDeliveryAddress'
 
 export default function CheckoutDialog(props) {
-    const {request} = useHttp()
     const [fullname, setfullname] = useState('')
     const [deliveryAddress, setDeliveryAddress] = useState('')
     const BasketContext = useContext(TemporaryBasketContext)
@@ -20,15 +18,15 @@ export default function CheckoutDialog(props) {
 
     useEffect(()=>{
       try{
-        async function Fetchdata(){
-          const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
-          setfullname(data.fullname)
-          if(data.errors){ props.setErrors(data.errors)}
-          if(data.message){ props.setMessage(data.message)}
+        if(!!ContextAuth.userId){
+          (async function (){
+            const  data = await props.request(`/auth/${ContextAuth.userId}`,'GET')
+            setfullname(data.fullname)
+            setDeliveryAddress(data.deliveryAddress)
+          }())
         }
-        if(!!ContextAuth.userId){Fetchdata()}
       }catch(e){console.log('CheckoutDialog useEffect',e)}
-    },[request])
+    },[])
 
     const ChangeHandler= event=>{
       setfullname(event.target.value)
@@ -41,21 +39,16 @@ export default function CheckoutDialog(props) {
     const CheckoutUser = async() =>{
       try{
         if(!!ContextAuth.userId){
-          const data = await request('/order', 'POST',
+          await props.request('/order', 'POST',
               {
                   userId:ContextAuth.userId,
-                  listProducts:props.productListId,
+                  listProducts:BasketContext.basket,
                   deliveryAddress:deliveryAddress
               }
           )
-          if(data.errors){props.setErrors(data.errors)}
-          if(data.message){props.setMessage(data.message)}
-          props.setProduct([])
-          props.setProductListId([])
-          ContextAuth.updateUserBasket(ContextAuth.userId)
         }
         else{
-          const data = await request(
+          const data = await props.request(
             '/order', 
             'POST',
             {
@@ -64,11 +57,8 @@ export default function CheckoutDialog(props) {
                 deliveryAddress:deliveryAddress
             }
           )
-          if(data.errors){props.setErrors(data.errors)}
-          if(data.message){props.setMessage(data.message)}
-          props.setProduct([])
-          BasketContext.DeleteBasket()
         }
+        BasketContext.DeleteBasket()
         props.setOpen(false);
       }catch(e){console.log('CheckoutDialog CheckoutUser',e)}  
     }
@@ -100,7 +90,7 @@ export default function CheckoutDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Отмена</Button>
-          <Button onClick={()=>CheckoutUser()}>Оформить</Button>
+          <Button onClick={CheckoutUser}>Оформить</Button>
         </DialogActions>
       </Dialog>
     </div>

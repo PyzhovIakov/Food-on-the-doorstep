@@ -7,8 +7,6 @@ const config = require('config')
 const User = require('./../models/User')
 const router=Router()
 
-
-
 router.post(
     '/registration',
     registerValidation,
@@ -21,7 +19,7 @@ router.post(
             
         const candidate = await User.findOne({email:req.body.email})
         if(candidate){
-            return res.status(400).json({errors:'Пользователь c таким email уже зарегистрирован'})
+            return res.status(400).json({error:'Пользователь c таким email уже зарегистрирован'})
         }
 
         const hashedPassword =await bcrypt.hash(req.body.password,12)
@@ -43,7 +41,7 @@ router.post(
         
         res.json({...userData,token, message:"Успешно зарегистрировались"})
     }catch(e){
-        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 
@@ -59,11 +57,11 @@ router.post(
     
             const user = await User.findOne({email:req.body.email}).populate('basket')
             if(!user){
-                return res.status(400).json({errors:'Неверный логин или пароль'})
+                return res.status(400).json({error:'Неверный логин или пароль'})
             }
             const isMatch = await bcrypt.compare(req.body.password, user.password)
             if(!isMatch){
-                return res.status(400).json({errors:'Неверный логин или пароль'})
+                return res.status(400).json({error:'Неверный логин или пароль'})
             }
 
             const {password, ...userData} = user._doc
@@ -75,7 +73,7 @@ router.post(
             
             res.json({...userData,token, message:"Успешно авторизовались"})
         }catch(e){
-            res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+            res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
         }
 })
 
@@ -83,15 +81,15 @@ router.get('/:id', async(req,res)=>{
     try
     {
         const userId = req.params.id
-        const user = await User.findById(userId).populate('basket.productId')
+        const user = await User.findById(userId).populate('basket.product')
         if(!user){
-            return res.status(404).json({errors:'Пользователь не найден'})
+            return res.status(404).json({error:'Пользователь не найден'})
         }
         const {password, ...userData} = user._doc 
         res.json({...userData})
     }
     catch(e){
-        res.status(500).json({errors:'Что-то пошло не так, попробуйте ещё раз.'})
+        res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})
     }
 })
 

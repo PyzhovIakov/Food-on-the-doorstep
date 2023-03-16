@@ -26,6 +26,7 @@ export default function AutocompleteDeliveryAddress(props) {
 
     return(
         <Autocomplete
+            value={props.value}
             onChange={(event, newValue) => {
               props.setValue(newValue)
             }}

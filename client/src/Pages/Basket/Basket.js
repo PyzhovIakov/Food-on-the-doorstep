@@ -1,86 +1,24 @@
-import React,{useContext,useState, useEffect,useCallback} from 'react'
-import AuthContext from './../../context/AuthContext'
+import React,{useContext,useState} from 'react'
 import TemporaryBasketContext from './../../context/TemporaryBasketContext'
-import useHttp from './../../hooks/http.hook'
-import Alert from '@mui/material/Alert';
 import TapeBasket from './../../Component/TapeBasket/TapeBasket'
+import CheckoutDialog from './../../Component/CheckoutDialog/CheckoutDialog'
+import useHttp from './../../hooks/http.hook.js'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import CheckoutDialog from './../../Component/CheckoutDialog/CheckoutDialog'
-
+import Alert from '@mui/material/Alert'
 
 export default function Basket() {
-    const {loading,request,error,ClearError} = useHttp()
-    const ContextAuth = useContext(AuthContext)
+    const {request,error,message,ClearError,ClearMessage} = useHttp()
     const BasketContext = useContext(TemporaryBasketContext)
-    const [product, setProduct] = useState([])
-    const [productListId, setProductListId] = useState([])
     const [openCheckoutDialog, setOpenCheckoutDialog] = useState(false);
-    const [message, setMessage] = useState(null)
-    const [errors, setErrors] = useState(null)
 
-    const FetchBasketUnauthorizedUser = useCallback(async()=>{
-        try{
-            let listProduct = []
-            for(let i=0;i<BasketContext.basket.length;i++){
-                const data = await request(`/catalog/${BasketContext.basket[i].id}`,'GET')
-                if(data.errors){setErrors(data.errors)}
-                listProduct.push({...data, count:BasketContext.basket[i].count})
-            }
-            setProduct(listProduct)
-        }catch(e){console.log('Basket FetchBasketUnauthorizedUser', e)}    
-    },[request, BasketContext.basket])
-
-    const FetchBasketAuthorizedUser = useCallback(async()=>{
-        try{
-            const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
-            if(data.errors){setErrors(data.errors)}
-            setProduct([])
-            setProductListId([])
-            for(let i=0;i<data.basket.length;i++){
-                setProductListId((prev)=>[...prev,data.basket[i].productId._id])
-                setProduct((prev)=>[...prev,{...data.basket[i].productId, count:data.basket[i].count}])
-            }
-        }catch(e){console.log('Basket FetchBasketAuthorizedUser', e)}    
-    },[request,ContextAuth.userId])
-
-    const ViewProduct = () => {
-        ContextAuth.CheckingAuthorizedUser()
-        if(!!ContextAuth.userId){
-            FetchBasketAuthorizedUser()
-        }else{
-            FetchBasketUnauthorizedUser()
-        }
-    }
-
-    useEffect(()=>{
-        ViewProduct()
-      },[])
-
-    const CheckoutUser = async() =>{
-        if(productListId.length===0 && BasketContext.basket.length===0){return;}
+    const CheckoutUser = () =>{
+        if(BasketContext.basket.length===0){return;}
         setOpenCheckoutDialog(true);
     }
 
-    const Increment = useCallback(async(id) => {
-        if(!!ContextAuth.userId){
-            const  data =  await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id,type:'Increment'})
-            if(data.errors){setErrors(data.errors)}
-        }else{
-            BasketContext.AddBasket(id)
-        }
-        ViewProduct()
-    },[])
-
-    const Decrement = useCallback(async(id) => {
-         if(!!ContextAuth.userId){
-            const  data =  await request(`/basket/${ContextAuth.userId}`,'PATCH',{basket:id,type:'Decrement'})
-            if(data.errors){setErrors(data.errors)}
-        }else{
-            BasketContext.DecrementBasket(id)
-        }
-        ViewProduct()
-    },[])
+    if(error){setTimeout(() => ClearError(), 6000)}
+    if(message){setTimeout(() => ClearMessage(), 6000)}
 
     return (
         <div>
@@ -90,19 +28,14 @@ export default function Basket() {
                     Оформить заказ 
                 </Button>
             </Stack>
+            {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
+            {message?<Alert severity="error" onClose={ClearMessage}>{message}</Alert>:null}
             <CheckoutDialog 
-                setErrors={setErrors}
-                setMessage={setMessage}
+                request={request}
                 open={openCheckoutDialog} 
                 setOpen={setOpenCheckoutDialog}
-                setProduct={setProduct}
-                productListId={productListId}
-                setProductListId={setProductListId}
             />
-            {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
-            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
-            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
-            {loading?'loading':<TapeBasket productInBasket={product} Increment={Increment} Decrement={Decrement}/>}          
+            <TapeBasket/>        
         </div>
     );
 }
