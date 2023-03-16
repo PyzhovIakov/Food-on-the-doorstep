@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import logo from './../../Image/logo.png'
 import Avatar from '@mui/material/Avatar'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import LinearProgress from '@mui/material/LinearProgress'
 
 export default function Profile() {
     const {loading,request,error,message,ClearError,ClearMessage} = useHttp()

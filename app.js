@@ -28,8 +28,6 @@ app.post('/upload', upload.single('image'), (req,res)=>{
     res.json({url:`/uploads/${req.file.originalname}`})
 })
 
-
-
 const PORT = config.get('port') || 5000
 async function start(){
     try {

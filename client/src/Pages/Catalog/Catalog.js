@@ -20,6 +20,14 @@ export default function Catalog() {
     }catch(e){console.log('Catalog fetchDataCatalog', e)}
   }
 
+  const HandlerProductRelease = async(id, FlagStop) =>{
+    try{
+      await request(`/catalog/${id}`,'PATCH',{isStopped:FlagStop})
+      fetchDataCatalog()
+    }catch(e){console.log('Catalog HandlerProductRelease', e)}  
+  }
+
+
   useEffect(()=>{
     fetchDataCatalog()
   },[request])
@@ -37,7 +45,7 @@ export default function Catalog() {
           </Button>
           :null
       }
-      {loading? <LinearProgress color="success" />:<CategoriesProduct product={product} request={request}/>}     
+      {loading? <LinearProgress color="success" />:<CategoriesProduct product={product} HandlerProductRelease={HandlerProductRelease}/>}     
     </div>
   );
 }

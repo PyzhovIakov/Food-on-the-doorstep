@@ -14,7 +14,7 @@ export default function CategoriesProduct(props) {
                         {
                             props.product[key].map((product, index)=>(
                                 <ProductCard
-                                    request={props.request}
+                                    HandlerProductRelease={props.HandlerProductRelease}
                                     key={index}
                                     product={product}
                                     index={index}

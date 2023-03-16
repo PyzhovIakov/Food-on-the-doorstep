@@ -48,7 +48,7 @@ export default function CheckoutDialog(props) {
           )
         }
         else{
-          const data = await props.request(
+          await props.request(
             '/order', 
             'POST',
             {
