@@ -14,9 +14,10 @@ export default function FormAuth(props){
             spacing={3}
             sx={{width:'35%'}}
         >
+            {props.buttonLoading? <LinearProgress color="success" />:null}     
             <h1>{props.formTitle}</h1>
             {
-                props.viewSelect?
+                props.viewSelectRole?
                         (<FormControl>
                         <InputLabel id="demo-simple-select-label">Роль</InputLabel>
                         <Select
@@ -36,6 +37,7 @@ export default function FormAuth(props){
             {
                 props.textFields.map((textField, index)=>(
                     <TextField
+                        sx={{borderRadius:'15px'}}
                         required
                         key={index}
                         id={textField.id}
@@ -52,7 +54,7 @@ export default function FormAuth(props){
                 size="large"  
                 color="success" 
                 onClick={props.buttononClick} 
-                disabled={props.buttonodisabled}
+                disabled={props.buttonLoading}
             >
                {props.buttonTitle}
             </Button>

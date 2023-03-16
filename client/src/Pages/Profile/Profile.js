@@ -10,32 +10,26 @@ import Avatar from '@mui/material/Avatar'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 
 export default function Profile() {
-    const {loading,request,error,ClearError} = useHttp()
+    const {loading,request,error,message,ClearError,ClearMessage} = useHttp()
     const ContextAuth = useContext(AuthContext)
-    const [message, setMessage] = useState(null)
-    const [errors, setErrors] = useState(null)
     const [user, setUser] = useState({})
 
     useEffect(()=>{
-        async function Fetchdata(){
-          try
-          {
+        (async function(){
+          try{
             const  data = await request(`/auth/${ContextAuth.userId}`,'GET')
             setUser(data)
-            if(data.errors){setErrors(data.errors)}
-            if(data.message){setMessage(data.message)}
           }catch(e){console.log('Profile useEffect Fetchdata', e)}
-          
-        }
-        Fetchdata()
+        }())
     },[request])
 
+    if(error){setTimeout(() => ClearError(), 6000)}
+    if(message){setTimeout(() => ClearMessage(), 6000)}
 
     return (
         <div>
-            {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
-            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
-            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
+            {error?<Alert severity="warning" onClose={ClearError}>{error}</Alert>:null}
+            {message?<Alert severity="info" onClose={ClearMessage}>{message}</Alert>:null}
             {(!loading && user!==null)?(
                 <Box sx={{width:'98%', margin:'20px auto'}}>
                     <Stack direction="row"   justifyContent="center"  alignItems="flex-start">
@@ -63,7 +57,7 @@ export default function Profile() {
                         </Stack>
                     </Stack>
                 </Box>
-            ):null}
+            ):<LinearProgress color="success" />}
         </div>
     );
 }

@@ -5,10 +5,8 @@ import useHttp from '../../hooks/http.hook'
 import FormAuth from "../../Component/FormAuth/FormAuth"
 
 export default function Accounts() {
-    const {loading,request,error,ClearError} = useHttp()
+    const {loading,request,error,message,ClearError,ClearMessage} = useHttp()
     const [form, setForm] = useState({email:'',password:'', fullname:'',role:'user'})
-    const [message, setMessage] = useState(null)
-    const [errors, setErrors] = useState(null)
 
     const ChangeHandler= event=>{
         setForm({...form,[event.target.name]:event.target.value})
@@ -16,9 +14,7 @@ export default function Accounts() {
 
     const registerHander  = async () =>{
         try{
-            const data = await request('/auth/registration', 'POST',{...form})
-            if(data.errors){setErrors(data.errors)}
-            if(data.message){setMessage(data.message)}
+            await request('/auth/registration', 'POST',{...form})
             setForm({email:'',password:'', fullname:'',role:'user'})
         }catch(e){console.log('Accounts registerHander', e)}
     } 
@@ -29,11 +25,13 @@ export default function Accounts() {
         {id:'password',label:"Пароль", name:"password", type:'password'}
     ]
 
+    if(error){setTimeout(() => ClearError(), 6000)}
+    if(message){setTimeout(() => ClearMessage(), 6000)}
+
     return (
         <div>
-            {error?<Alert severity="error" onClose={() => {ClearError()}}>{error}</Alert>:null}
-            {errors?<Alert severity="warning" onClose={() => {setErrors(null)}}>{errors}</Alert>:null}
-            {message?<Alert severity="info" onClose={() => {setMessage(null)}}>{message}</Alert>:null}
+            {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
+            {message?<Alert severity="error" onClose={ClearMessage}>{message}</Alert>:null}
             <Stack
             direction="row"
             justifyContent="space-evenly"
@@ -43,11 +41,11 @@ export default function Accounts() {
                 <FormAuth
                     formTitle={'Регистрация'}
                     textFields={TextFields}
-                    viewSelect={true}
+                    viewSelectRole={true}
                     formValue={form}
                     onChangeTextFields={ChangeHandler}
                     buttononClick={registerHander}
-                    buttonodisabled={loading}
+                    buttonLoading={loading}
                     buttonTitle={'Зарегистрировать'}
                 />
             </Stack>

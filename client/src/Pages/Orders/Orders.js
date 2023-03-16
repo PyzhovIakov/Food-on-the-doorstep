@@ -40,9 +40,9 @@ export default function Orders() {
 
     return (
         <div>
-            <h1>Заказы</h1>
             {error?<Alert severity="warning" onClose={ClearError}>{error}</Alert>:null}
             {message?<Alert severity="info" onClose={ClearMessage}>{message}</Alert>:null}
+            <h1>Заказы</h1>
             {loading?<LinearProgress color="success" />:<OrdersTape saveChanges={saveChanges} orders={orders}/>}
         </div>
     );
