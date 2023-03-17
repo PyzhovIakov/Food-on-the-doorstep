@@ -13,11 +13,13 @@ import Skeleton from '@mui/material/Skeleton'
 import AuthContext from './../../../context/AuthContext'
 import TemporaryBasketContext from './../../../context/TemporaryBasketContext.js'
 import DialogProduct from './../DialogProduct/DialogProduct'
+import DialogEditAndAddProduct from './../DialogEditAndAddProduct/DialogEditAndAddProduct'
 
 export default function ProductCard(props) {
     const ContextAuth = useContext(AuthContext)
     const BasketContext = useContext(TemporaryBasketContext)
     const [openDialogProduct , seOpenDialogProduct] = useState(false)
+    const [openDialogEditAndAddProduct , seOpenDialogEditAndAddProduct] = useState(false)
     const [loading, setLoading] = useState(false)
 
     useEffect(()=>{
@@ -37,6 +39,13 @@ export default function ProductCard(props) {
           open={openDialogProduct} 
           setOpen={seOpenDialogProduct}
           clickBuyProduct={AddProductinBaset}
+        />
+        <DialogEditAndAddProduct
+          categories={props.categories}
+          title={'Редактировать продукт'}
+          product={props.product}
+          open={openDialogEditAndAddProduct} 
+          setOpen={seOpenDialogEditAndAddProduct}
         />
         <Box key={props.index} sx={{ width: 250, height: 260, marginLeft:'5px',marginRight:'5px',borderRadius:'15px' ,boxShadow:3}}>
             {
@@ -63,7 +72,7 @@ export default function ProductCard(props) {
                     >
                       {props.product.isStopped? <DangerousIcon/>:<TaskAltIcon/>}
                     </Button>
-                    <Button variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
+                    <Button onClick={()=>seOpenDialogEditAndAddProduct(true)} variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>
                       <EditIcon/>
                     </Button>
                     <Button onClick={()=>props.DeleteProduct(props.product._id)} variant="contained" color="success" sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}>

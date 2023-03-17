@@ -6,12 +6,13 @@ import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 import LinearProgress from '@mui/material/LinearProgress'
+import DialogEditAndAddProduct from './../../Component/categoriesProduct/DialogEditAndAddProduct/DialogEditAndAddProduct'
 
 export default function Catalog() {
   const {loading,request,error,ClearError} = useHttp()
   const ContextAuth = useContext(AuthContext)
   const [product, setProduct] = useState({})
-
+  const [openDialogEditAndAddProduct , seOpenDialogEditAndAddProduct] = useState(false)
   const fetchDataCatalog = async() =>{
     try{
       setProduct({})
@@ -46,11 +47,17 @@ export default function Catalog() {
       {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
       {
         ContextAuth.role==='manager'? 
-          <Button variant="contained" color="success" sx={{borderRadius:'15px', m:'20px 5px'}} startIcon={<AddIcon/>}>
+          <Button onClick={()=>seOpenDialogEditAndAddProduct(true)} variant="contained" color="success" sx={{borderRadius:'15px', m:'20px 5px'}} startIcon={<AddIcon/>}>
             Добавить в меню
           </Button>
           :null
       }
+       <DialogEditAndAddProduct
+          categories={product}
+          title={'Добавить продукт'}
+          open={openDialogEditAndAddProduct} 
+          setOpen={seOpenDialogEditAndAddProduct}
+        />
       {
         loading? 
           <LinearProgress color="success" />:

@@ -8,7 +8,7 @@ const app = express()
 //storage img
 const storage = multer.diskStorage({
     destination:(_,__,cd)=>{
-        cd(null,'uploads')
+        cd(null,'uploads/ImagesProducts')
     },
     filename:(_,file,cd)=>{
         cd(null,file.originalname)
@@ -24,8 +24,8 @@ app.use('/order',require('./routes/order.routes'))
 
 //uploads images
 app.use('/uploads', express.static('uploads'))
-app.post('/upload', upload.single('image'), (req,res)=>{
-    res.json({url:`/uploads/${req.file.originalname}`})
+app.post('/upload/ImagesProducts', upload.single('ImagesProducts'), (req,res)=>{
+    res.json({url:`/uploads/ImagesProducts/${req.file.originalname}`})
 })
 
 const PORT = config.get('port') || 5000
