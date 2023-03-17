@@ -16,7 +16,7 @@ export default function CategoriesProduct(props) {
                                 <ProductCard
                                     categories={props.product}
                                     DeleteProduct={props.DeleteProduct}
-                                    HandlerProductRelease={props.HandlerProductRelease}
+                                    EditProduct={props.EditProduct}
                                     key={index}
                                     product={product}
                                     index={index}

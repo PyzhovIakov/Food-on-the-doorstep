@@ -21,7 +21,8 @@ router.post(
                 weight:req.body.weight,
                 price:req.body.price,
                 description:req.body.description,
-                imageUrl:req.body.imageUrl
+                imageUrl:req.body.imageUrl,
+                isStopped:false
             })
             await doc.save()
 
@@ -68,7 +69,7 @@ router.get('/:id', async(req,res)=>{
     }
 })
 
-router.patch('/:id',[check('isStopped','Ошибка блокировки').isBoolean()], async(req,res)=>{
+router.patch('/:id', productValidation, async(req,res)=>{
     try
     {
         const errors = validationResult(req)
@@ -83,6 +84,12 @@ router.patch('/:id',[check('isStopped','Ошибка блокировки').isBo
         }
 
         await Catalog.updateOne({_id:productId},{
+            name:req.body.name,
+            category:req.body.category,
+            weight:req.body.weight,
+            price:req.body.price,
+            description:req.body.description,
+            imageUrl:req.body.imageUrl,
             isStopped:req.body.isStopped
         })
         res.json({message:"Успешно"})
@@ -97,18 +104,10 @@ router.delete('/:id', async(req,res)=>{
     {
         const productId = req.params.id
         
-        await Catalog.findOneAndDelete({_id:productId},(err,doc)=>{
-            if(err){
-                res.json({error:"Ошибка"})
-            }
+        await Catalog.findOneAndDelete({_id:productId})
 
-            if(!doc){
-                res.json({error:"Продукт не найден"})
-            }
+        res.json({message:"Успешно"})
 
-            res.json({message:"Успешно"})
-        })
-       
     }
     catch(e){
         res.status(500).json({error:'Что-то пошло не так, попробуйте ещё раз.'})

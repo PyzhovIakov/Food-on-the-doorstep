@@ -3,17 +3,13 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-//import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Stack from '@mui/material/Stack'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import logo from './../../../Image/logo.png'
 import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import FormControl from '@mui/material/FormControl'
+import Autocomplete from '@mui/material/Autocomplete'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import Skeleton from '@mui/material/Skeleton'
 import Alert from '@mui/material/Alert'
@@ -106,22 +102,21 @@ export default function DialogEditAndAddProduct(props) {
                                 defaultValue={product.name}
                                 name="name"
                             />
-                            <FormControl>
-                                <InputLabel id="demo-simple-select-label">Категория</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    value={product.category}
-                                    label="Категория"
-                                    name='category'
-                                    onChange={ChangeHandler}
-                                >
-                                    {
-                                        listCategories.map((category,index)=>(
-                                            <MenuItem key={index} value={category}>{category}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
+                            <Autocomplete
+                                freeSolo
+                                disableClearable
+                                value={product.category}
+                                onChange={(event, newValue) => {
+                                    setProduct({...product,category:newValue})
+                                }}
+                                onInputChange={(event, newInputValue) => {
+                                    setProduct({...product,category:newInputValue})
+                                  }}
+                                options={listCategories}
+                                sx={{ width: 300 }}
+                                renderInput={(params) => <TextField {...params} label="Категория" />}
+                            />
+                            
                             <TextField
                                 required
                                 label="Вес"
@@ -151,7 +146,7 @@ export default function DialogEditAndAddProduct(props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Отмена</Button>
-                <Button>{props.title}</Button>
+                <Button onClick={()=>props.buttonClick(product)}>{props.title}</Button>
             </DialogActions>
         </Dialog>
         </div>

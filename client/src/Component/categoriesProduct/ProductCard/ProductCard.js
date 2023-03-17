@@ -41,12 +41,14 @@ export default function ProductCard(props) {
           clickBuyProduct={AddProductinBaset}
         />
         <DialogEditAndAddProduct
+          buttonClick={props.EditProduct}
           categories={props.categories}
           title={'Редактировать продукт'}
           product={props.product}
           open={openDialogEditAndAddProduct} 
           setOpen={seOpenDialogEditAndAddProduct}
         />
+        
         <Box key={props.index} sx={{ width: 250, height: 260, marginLeft:'5px',marginRight:'5px',borderRadius:'15px' ,boxShadow:3}}>
             {
               loading?
@@ -65,7 +67,7 @@ export default function ProductCard(props) {
                 ContextAuth.role==='manager'?
                   <>
                     <Button 
-                      onClick={()=>props.HandlerProductRelease(props.product._id, !props.product.isStopped)}
+                      onClick={()=>props.EditProduct({...props.product, isStopped:!props.product.isStopped})}
                       variant="contained" 
                       color={props.product.isStopped? 'error':'success'}
                       sx={{borderRadius:'50%', m:0,p:'10px', minWidth:0}}
