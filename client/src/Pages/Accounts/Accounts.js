@@ -1,6 +1,5 @@
 import React,{useState} from "react"
-import Stack from '@mui/material/Stack';
-import Alert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert'
 import useHttp from '../../hooks/http.hook'
 import FormAuth from "../../Component/FormAuth/FormAuth"
 
@@ -32,23 +31,16 @@ export default function Accounts() {
         <div>
             {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
             {message?<Alert severity="error" onClose={ClearMessage}>{message}</Alert>:null}
-            <Stack
-            direction="row"
-            justifyContent="space-evenly"
-            alignItems="center"
-            spacing={2}
-            >
-                <FormAuth
-                    formTitle={'Регистрация'}
-                    textFields={TextFields}
-                    viewSelectRole={true}
-                    formValue={form}
-                    onChangeTextFields={ChangeHandler}
-                    buttononClick={registerHander}
-                    buttonLoading={loading}
-                    buttonTitle={'Зарегистрировать'}
-                />
-            </Stack>
+            <FormAuth
+                formTitle={'Регистрация'}
+                textFields={TextFields}
+                viewSelectRole={true}
+                formValue={form}
+                onChangeTextFields={ChangeHandler}
+                buttononClick={registerHander}
+                buttonLoading={loading}
+                buttonTitle={'Зарегистрировать'}
+            />
         </div>
     );
 }

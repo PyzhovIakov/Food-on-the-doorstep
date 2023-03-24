@@ -1,9 +1,8 @@
 import React,{useState, useContext} from "react"
-import Stack from '@mui/material/Stack';
-import Alert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert'
 import useHttp from '../../hooks/http.hook'
 import AuthContext from './../../context/AuthContext'
-import FormAuth from "../../Component/FormAuth/FormAuth";
+import FormAuth from "../../Component/FormAuth/FormAuth"
 
 export default function Login() {
     const {loading,request,error,message,ClearError,ClearMessage} = useHttp()
@@ -34,23 +33,16 @@ export default function Login() {
         <div>
             {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
             {message?<Alert severity="error" onClose={ClearMessage}>{message}</Alert>:null}
-            <Stack
-                direction="row"
-                justifyContent="space-evenly"
-                alignItems="center"
-                spacing={2}
-            >
-                <FormAuth
-                    formTitle={'Авторизация'}
-                    textFields={TextFields}
-                    viewSelectRole={false}
-                    formValue={form}
-                    onChangeTextFields={ChangeHandler}
-                    buttononClick={loginHander}
-                    buttonLoading={loading}
-                    buttonTitle={'Войти'}
-                />
-            </Stack>
+            <FormAuth
+                formTitle={'Авторизация'}
+                textFields={TextFields}
+                viewSelectRole={false}
+                formValue={form}
+                onChangeTextFields={ChangeHandler}
+                buttononClick={loginHander}
+                buttonLoading={loading}
+                buttonTitle={'Войти'}
+            />
         </div>
     );
 }

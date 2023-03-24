@@ -33,6 +33,7 @@ const NavigationUserRoleController=(Role) =>{
         return([
             {path:'/catalog', element:<Catalog/>, exact:true},
             {path:'/accounts', element:<Accounts/>, exact:true},
+            {path:'/contacts', element:<Contacts/>, exact:true},
             {path:'/statistics', element:<Statistics/>, exact:true},
             {path:'*', element:<Navigate to="/" replace />, exact:false},
             {path:'/profile', element:<Profile/>, exact:true}

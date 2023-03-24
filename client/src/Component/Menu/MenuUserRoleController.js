@@ -14,6 +14,7 @@ const MenuUserRoleController= (Role)=>{
     }
     if(Role==='admin'){
         return([  
+            {to:'/contacts', text:'Контакты'},     
             {to:'/catalog', text:'Меню'},
             {to:'/statistics', text:'Статистика'},
             {to:'/accounts', text:'Учетки'}      
