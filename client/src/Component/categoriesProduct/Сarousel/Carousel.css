@@ -23,8 +23,8 @@
 .carousel-content {
     display: flex;
     transition: all 250ms linear;
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 
@@ -32,7 +32,7 @@
     display: none;
 }
 
-.carousel-content > * {
+.carousel-content>* {
     flex-shrink: 0;
     flex-grow: 1;
 }

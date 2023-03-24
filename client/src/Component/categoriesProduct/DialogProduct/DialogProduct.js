@@ -17,15 +17,15 @@ export default function DialogProduct(props) {
   };
 
   const AddProductinBaset = () => {
-      props.clickBuyProduct(props.product) 
-      props.setOpen(false)
+    props.clickBuyProduct(props.product)
+    props.setOpen(false)
   }
 
   return (
     <div>
       <Dialog open={props.open} onClose={handleClose}>
         <DialogTitle>
-          <Stack  direction="row"  justifyContent="space-between" alignItems="center">
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
             {props.product.name}
             <IconButton onClick={handleClose}>
               <CloseIcon />
@@ -33,11 +33,11 @@ export default function DialogProduct(props) {
           </Stack>
         </DialogTitle>
         <DialogContent>
-          <Stack  direction="row">
-            <img 
-              src={props.product.imageUrl?'http://localhost:5000'+props.product.imageUrl:logo} 
+          <Stack direction="row">
+            <img
+              src={props.product.imageUrl ? 'http://localhost:5000' + props.product.imageUrl : logo}
               height={'200px'}
-              style={{borderRadius:'15px'}} 
+              style={{ borderRadius: '15px' }}
               alt={props.product.name}
             />
             <div>
@@ -47,13 +47,13 @@ export default function DialogProduct(props) {
               <DialogContentText>Цена:{props.product.price}р</DialogContentText>
             </div>
           </Stack>
-          <DialogContentText> 
+          <DialogContentText>
             {props.product.description}
-          </DialogContentText>      
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button onClick={handleClose}>Отмена</Button>
-            <Button disabled={props.product.isStopped} onClick={AddProductinBaset}>Купить</Button>
+          <Button onClick={handleClose}>Отмена</Button>
+          <Button disabled={props.product.isStopped} onClick={AddProductinBaset}>Купить</Button>
         </DialogActions>
       </Dialog>
     </div>

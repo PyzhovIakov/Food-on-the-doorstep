@@ -7,21 +7,21 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import LinearProgress from '@mui/material/LinearProgress'
 
-export default function FormAuth(props){
+export default function FormAuth(props) {
     return (
-        <> 
-            {props.buttonLoading? <LinearProgress color="success" />:null}  
+        <>
+            {props.buttonLoading ? <LinearProgress color="success" /> : null}
             <Stack
                 direction="column"
                 justifyContent="center"
                 spacing={3}
-                sx={{width:'35%', margin:'20px auto', boxShadow: 3, padding:'10px 20px 20px',borderRadius:'15px'}}
+                sx={{ width: '35%', margin: '20px auto', boxShadow: 3, padding: '10px 20px 20px', borderRadius: '15px' }}
             >
-                
-                <h1 style={{margin:0, padding:0}}>{props.formTitle}</h1>
+
+                <h1 style={{ margin: 0, padding: 0 }}>{props.formTitle}</h1>
                 {
-                    props.viewSelectRole?
-                            (<FormControl>
+                    props.viewSelectRole ?
+                        (<FormControl>
                             <InputLabel id="demo-simple-select-label">Роль</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
@@ -35,12 +35,12 @@ export default function FormAuth(props){
                                 <MenuItem value={'manager'}>Менеджер</MenuItem>
                                 <MenuItem value={'admin'}>Администратор</MenuItem>
                             </Select>
-                        </FormControl>):null
+                        </FormControl>) : null
                 }
                 {
-                    props.textFields.map((textField, index)=>(
+                    props.textFields.map((textField, index) => (
                         <TextField
-                            sx={{borderRadius:'15px'}}
+                            sx={{ borderRadius: '15px' }}
                             required
                             key={index}
                             id={textField.id}
@@ -52,14 +52,14 @@ export default function FormAuth(props){
                         />
                     ))
                 }
-                <Button 
-                    variant="contained" 
-                    size="large"  
-                    color="success" 
-                    onClick={props.buttononClick} 
+                <Button
+                    variant="contained"
+                    size="large"
+                    color="success"
+                    onClick={props.buttononClick}
                     disabled={props.buttonLoading}
                 >
-                {props.buttonTitle}
+                    {props.buttonTitle}
                 </Button>
             </Stack>
         </>

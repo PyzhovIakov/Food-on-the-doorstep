@@ -4,32 +4,32 @@ import ProductCard from './ProductCard/ProductCard'
 
 export default function CategoriesProduct(props) {
 
-    return(
-       <div>
-          {
-            Object.keys(props.product).map((key)=>(
-                <div key={key} style={{marginTop:'25px'}}>
-                    <h1 style={{padding:0,margin:'5px'}}>{key}</h1>
-                    <Carousel cardLength={265} cardHeight={290}>
-                        {
-                            props.product[key].map((product, index)=>(
-                                <ProductCard
-                                    categories={props.product}
-                                    DeleteProduct={props.DeleteProduct}
-                                    EditProduct={props.EditProduct}
-                                    key={index}
-                                    product={product}
-                                    index={index}
-                                />
-                            ))
-                        }
-                    </Carousel>
-                </div>
-            ))
+    return (
+        <div>
+            {
+                Object.keys(props.product).map((key) => (
+                    <div key={key} style={{ marginTop: '25px' }}>
+                        <h1 style={{ padding: 0, margin: '5px' }}>{key}</h1>
+                        <Carousel cardLength={265} cardHeight={290}>
+                            {
+                                props.product[key].map((product, index) => (
+                                    <ProductCard
+                                        categories={props.product}
+                                        DeleteProduct={props.DeleteProduct}
+                                        EditProduct={props.EditProduct}
+                                        key={index}
+                                        product={product}
+                                        index={index}
+                                    />
+                                ))
+                            }
+                        </Carousel>
+                    </div>
+                ))
 
-           
 
-          }
-       </div>
+
+            }
+        </div>
     );
 }

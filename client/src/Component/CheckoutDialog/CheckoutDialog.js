@@ -1,4 +1,4 @@
-import React, {useState,useContext,useEffect}from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -11,57 +11,57 @@ import AuthContext from './../../context/AuthContext'
 import AutocompleteDeliveryAddress from './../AutocompleteDeliveryAddress/AutocompleteDeliveryAddress'
 
 export default function CheckoutDialog(props) {
-    const [fullname, setfullname] = useState('')
-    const [deliveryAddress, setDeliveryAddress] = useState('')
-    const BasketContext = useContext(TemporaryBasketContext)
-    const ContextAuth = useContext(AuthContext)
+  const [fullname, setfullname] = useState('')
+  const [deliveryAddress, setDeliveryAddress] = useState('')
+  const BasketContext = useContext(TemporaryBasketContext)
+  const ContextAuth = useContext(AuthContext)
 
-    useEffect(()=>{
-      try{
-        if(!!ContextAuth.userId){
-          (async function (){
-            const  data = await props.request(`/auth/${ContextAuth.userId}`,'GET')
-            setfullname(data.fullname)
-            setDeliveryAddress(data.deliveryAddress)
-          }())
-        }
-      }catch(e){console.log('CheckoutDialog useEffect',e)}
-    },[])
+  useEffect(() => {
+    try {
+      if (!!ContextAuth.userId) {
+        (async function () {
+          const data = await props.request(`/auth/${ContextAuth.userId}`, 'GET')
+          setfullname(data.fullname)
+          setDeliveryAddress(data.deliveryAddress)
+        }())
+      }
+    } catch (e) { console.log('CheckoutDialog useEffect', e) }
+  }, [])
 
-    const ChangeHandler= event=>{
-      setfullname(event.target.value)
-    }
+  const ChangeHandler = event => {
+    setfullname(event.target.value)
+  }
 
-    const handleClose = () => {
-        props.setOpen(false);
-    }
+  const handleClose = () => {
+    props.setOpen(false);
+  }
 
-    const CheckoutUser = async() =>{
-      try{
-        if(!!ContextAuth.userId){
-          await props.request('/order', 'POST',
-              {
-                  userId:ContextAuth.userId,
-                  listProducts:BasketContext.basket,
-                  deliveryAddress:deliveryAddress
-              }
-          )
-        }
-        else{
-          await props.request(
-            '/order', 
-            'POST',
-            {
-                listProducts:BasketContext.basket,
-                fullname:fullname,
-                deliveryAddress:deliveryAddress
-            }
-          )
-        }
-        BasketContext.DeleteBasket()
-        props.setOpen(false);
-      }catch(e){console.log('CheckoutDialog CheckoutUser',e)}  
-    }
+  const CheckoutUser = async () => {
+    try {
+      if (!!ContextAuth.userId) {
+        await props.request('/order', 'POST',
+          {
+            userId: ContextAuth.userId,
+            listProducts: BasketContext.basket,
+            deliveryAddress: deliveryAddress
+          }
+        )
+      }
+      else {
+        await props.request(
+          '/order',
+          'POST',
+          {
+            listProducts: BasketContext.basket,
+            fullname: fullname,
+            deliveryAddress: deliveryAddress
+          }
+        )
+      }
+      BasketContext.DeleteBasket()
+      props.setOpen(false);
+    } catch (e) { console.log('CheckoutDialog CheckoutUser', e) }
+  }
 
 
   return (
@@ -69,7 +69,7 @@ export default function CheckoutDialog(props) {
       <Dialog open={props.open} onClose={handleClose} maxWidth={'sm'} fullWidth={true}>
         <DialogTitle>Заказ</DialogTitle>
         <DialogContent>
-          <DialogContentText> 
+          <DialogContentText>
             Введите ФИО получателя.
           </DialogContentText>
           <TextField

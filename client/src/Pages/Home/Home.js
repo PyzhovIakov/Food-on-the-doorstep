@@ -4,8 +4,8 @@ import QuestionAnswer from './../../Component/QuestionAnswer/QuestionAnswer'
 export default function Home() {
     return (
         <div>
-            <Banner/>
-            <QuestionAnswer/>
+            <Banner />
+            <QuestionAnswer />
         </div>
     );
 }

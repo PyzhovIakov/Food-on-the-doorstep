@@ -1,38 +1,38 @@
-import React,{useState, useContext} from "react"
+import React, { useState, useContext } from "react"
 import Alert from '@mui/material/Alert'
 import useHttp from '../../hooks/http.hook'
 import AuthContext from './../../context/AuthContext'
 import FormAuth from "../../Component/FormAuth/FormAuth"
 
 export default function Login() {
-    const {loading,request,error,message,ClearError,ClearMessage} = useHttp()
-    const [form, setForm] = useState({email:'',password:''})
+    const { loading, request, error, message, ClearError, ClearMessage } = useHttp()
+    const [form, setForm] = useState({ email: '', password: '' })
     const auth = useContext(AuthContext)
 
-    const ChangeHandler= event=>{
-        setForm({...form,[event.target.name]:event.target.value})
+    const ChangeHandler = event => {
+        setForm({ ...form, [event.target.name]: event.target.value })
     }
 
-    const loginHander  = async () =>{
-        try{
-           const data = await request('/auth/login', 'POST',{...form})
-           auth.login(data.token, data._id)
-           setForm({email:'',password:''})
-        }catch(e){console.log('Login loginHander', e)}
+    const loginHander = async () => {
+        try {
+            const data = await request('/auth/login', 'POST', { ...form })
+            auth.login(data.token, data._id)
+            setForm({ email: '', password: '' })
+        } catch (e) { console.log('Login loginHander', e) }
     }
 
-    const TextFields =[
-        {id:'email',label:"email",  name:"email", type:'email'},
-        {id:'password',label:"Пароль", name:"password", type:'password'}
+    const TextFields = [
+        { id: 'email', label: "email", name: "email", type: 'email' },
+        { id: 'password', label: "Пароль", name: "password", type: 'password' }
     ]
 
-    if(error){setTimeout(() => ClearError(), 6000)}
-    if(message){setTimeout(() => ClearMessage(), 6000)}
+    if (error) { setTimeout(() => ClearError(), 6000) }
+    if (message) { setTimeout(() => ClearMessage(), 6000) }
 
     return (
         <div>
-            {error?<Alert severity="error" onClose={ClearError}>{error}</Alert>:null}
-            {message?<Alert severity="error" onClose={ClearMessage}>{message}</Alert>:null}
+            {error ? <Alert severity="error" onClose={ClearError}>{error}</Alert> : null}
+            {message ? <Alert severity="error" onClose={ClearMessage}>{message}</Alert> : null}
             <FormAuth
                 formTitle={'Авторизация'}
                 textFields={TextFields}

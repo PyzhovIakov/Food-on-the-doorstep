@@ -4,16 +4,16 @@ import OrderCard from './OrderCard/OrderCard'
 
 export default function OrdersTape(props) {
 
-    return(
+    return (
         <>
-            <Box sx={{ width:'95%', marginLeft:'auto',marginRight:'auto'}}>
-            {
-                props.orders.length!==0?props.orders.map((order,index)=>(
-                    <OrderCard saveChanges={props.saveChanges} order={order} key={index} index={index} />
-                )):null
-            }
-        </Box>
+            <Box sx={{ width: '95%', marginLeft: 'auto', marginRight: 'auto' }}>
+                {
+                    props.orders.length !== 0 ? props.orders.map((order, index) => (
+                        <OrderCard saveChanges={props.saveChanges} order={order} key={index} index={index} />
+                    )) : null
+                }
+            </Box>
         </>
-        
+
     );
 }
