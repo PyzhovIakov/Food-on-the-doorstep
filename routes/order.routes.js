@@ -16,6 +16,22 @@ router.get('', async (req, res) => {
     }
 })
 
+router.get('/:id', async (req, res) => {
+    try {
+        const userId = req.params.id
+        const order = await Order.find({userId:userId}).sort({"dateOrder":-1}).populate('listProducts.product').populate('userId')
+        if(order.length==0){
+            res.status(400).json({ errors: 'Данных нет' })
+        }else{
+            res.json(order[0])
+        }
+        
+    }
+    catch (e) {
+        res.status(500).json({ errors: 'Что-то пошло не так, попробуйте ещё раз.' })
+    }
+})
+
 router.post('', [check('deliveryAddress', 'Введите адрес').exists()],
     async (req, res) => {
         try {

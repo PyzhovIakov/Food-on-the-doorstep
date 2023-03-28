@@ -1,26 +1,70 @@
 import React, { useEffect, useState, useContext } from 'react'
 import useHttp from './../../hooks/http.hook.js'
-import Alert from '@mui/material/Alert'
+import logo from './../../Image/logo.png'
 import AuthContext from './../../context/AuthContext'
+import DateAndTimeHandler from './../../Functions/DateAndTimeHandler'
+import Carousel from './../../Component/Сarousel/Сarousel'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import logo from './../../Image/logo.png'
 import Avatar from '@mui/material/Avatar'
+import Alert from '@mui/material/Alert'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import LinearProgress from '@mui/material/LinearProgress'
+import AppBar from '@mui/material/AppBar'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Chip from '@mui/material/Chip'
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box >
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+function a11yProps(index) {
+    return {
+        id: `full-width-tab-${index}`,
+        'aria-controls': `full-width-tabpanel-${index}`,
+    };
+}
+
 
 export default function Profile() {
     const { loading, request, error, message, ClearError, ClearMessage } = useHttp()
     const ContextAuth = useContext(AuthContext)
     const [user, setUser] = useState({})
+    const [odrer, setOrder] = useState({})
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     useEffect(() => {
         (async function () {
             try {
-                const data = await request(`/auth/${ContextAuth.userId}`, 'GET')
-                setUser(data)
-            } catch (e) { console.log('Profile useEffect Fetchdata', e) }
+                const dataUser = await request(`/auth/${ContextAuth.userId}`, 'GET')
+                setUser(dataUser)
+                const dataOrder = await request(`/order/${ContextAuth.userId}`, 'GET')
+                setOrder(dataOrder)
+                setOrder(prev => ({ ...prev, dateDelivery: DateAndTimeHandler.dateAndTime(dataOrder.dateDelivery), dateOrder: DateAndTimeHandler.dateAndTime(dataOrder.dateOrder) }))
+               
+            } catch (e) { console.log('Profile useEffect', e) }
         }())
     }, [request])
 
@@ -51,11 +95,81 @@ export default function Profile() {
                                 Удалить аккаунт
                             </Button>
                         </Stack>
-                        <Stack direction="column" justifyContent="flex-start" alignItems="stretch" spacing={2}>
-                            <h2>{user.fullname}</h2>
-                            <h3>{user.email}</h3>
-                            <h3>Прошлый адрес доставки:{user.deliveryAddress ? user.deliveryAddress : 'нет'}</h3>
-                        </Stack>
+                        <Box sx={{ width: '50vw' }}>
+                            <AppBar position="static" color="success">
+                                <Tabs
+                                    value={value}
+                                    onChange={handleChange}
+                                    indicatorColor="text.disabled"
+                                    textColor="inherit"
+                                    variant="fullWidth"
+                                    aria-label="full width tabs example"
+                                >
+                                    <Tab label="Личный данные" {...a11yProps(0)} />
+                                    <Tab label="Прошлый заказ" {...a11yProps(1)} />
+                                </Tabs>
+                            </AppBar>
+                            <TabPanel value={value} index={0}>
+                                <Box>
+                                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                        <h4 style={{ margin: '10px 20px' }}>Никнейм</h4>
+                                        <h4 style={{ margin: '10px 20px' }}>{user.fullname}</h4>
+                                    </Stack>
+                                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                        <h4 style={{ margin: '10px 20px' }}>Email</h4>
+                                        <h4 style={{ margin: '10px 20px' }}>{user.email}</h4>
+                                    </Stack>
+                                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                        <h4 style={{ margin: '10px 20px' }}>Прошлый адрес доставки</h4>
+                                        <h4 style={{ margin: '10px 20px' }}>{user.deliveryAddress ? user.deliveryAddress : 'нет'}</h4>
+                                    </Stack>
+                                </Box>
+                            </TabPanel>
+                            <TabPanel value={value} index={1}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                    <h4 style={{ margin: '10px 20px' }}>Дата заказа</h4>
+                                    <h4 style={{ margin: '10px 20px' }}>{odrer.dateOrder}</h4>
+                                </Stack>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                    <h4 style={{ margin: '10px 20px' }}>Дата доставки</h4>
+                                    <h4 style={{ margin: '10px 20px' }}>{odrer.dateDelivery}</h4>
+                                </Stack>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                    <h4 style={{ margin: '10px 20px' }}>Статус заказа</h4>
+                                    <h4 style={{ margin: '10px 20px' }}>{odrer.status}</h4>
+                                </Stack>
+                                <Box sx={{ mt: 3 }}>
+                                    {
+                                        odrer.listProducts ?
+                                            <Carousel cardLength={250} cardHeight={190} widthContainer={window.innerWidth * 0.5}>
+                                                {
+                                                    odrer.listProducts.map((product, index) => (
+                                                        <Box key={index} sx={{ width: 220, height: 140, marginLeft: '5px', marginRight: '5px', borderRadius: '15px', boxShadow: 3 }}>
+                                                            <img
+                                                                src={product.product.imageUrl ? 'http://localhost:5000' + product.product.imageUrl : logo}
+                                                                width={'100%'}
+                                                                height={'100%'}
+                                                                style={{ borderRadius: '15px' }}
+                                                                alt={product.product.name}
+                                                            />
+                                                            <Chip
+                                                                label={product.count} 
+                                                                color="success" 
+                                                                sx={{
+                                                                    position: 'relative',
+                                                                    top: '-40px',
+                                                                    left:'5px'
+                                                                }} 
+                                                            />
+                                                        </Box>
+                                                    ))
+                                                }
+                                            </Carousel>
+                                            : null
+                                    }
+                                </Box>
+                            </TabPanel>
+                        </Box>
                     </Stack>
                 </Box>
             ) : <LinearProgress color="success" />}

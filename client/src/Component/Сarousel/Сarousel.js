@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './Carousel.css'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
@@ -26,7 +26,7 @@ function Carousel(props) {
     }
 
     return (
-        <div className="carousel-container">
+        <div className="carousel-container" style={{ width: props.widthContainer + 'px' }}>
             <div className="carousel-wrapper" style={{ height: props.cardHeight + 'px' }}>
                 {currentIndex > 0 && (
                     <Button variant="contained" color="success" sx={{ borderRadius: '50%', m: 0, p: '10px 20px', minWidth: 0 }} className={'left-arrow'} onClick={prev}>
@@ -37,7 +37,7 @@ function Carousel(props) {
                         {children}
                     </div>
                 </div>
-                {currentIndex <= (length - Math.round(1300 / props.cardLength) - 1) &&
+                {currentIndex <= (length - Math.round(props.widthContainer / props.cardLength) - 1) &&
                     (
                         <Button variant="contained" color="success" sx={{ borderRadius: '50%', m: 0, p: '10px 20px', minWidth: 0 }} className={'right-arrow '} onClick={next}>
                             <ArrowForwardIosIcon fontSize="large" />

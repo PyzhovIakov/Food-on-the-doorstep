@@ -1,5 +1,5 @@
 import React from 'react'
-import Carousel from './../categoriesProduct/Сarousel/Сarousel'
+import Carousel from './../Сarousel/Сarousel'
 import Box from '@mui/material/Box'
 import discount1 from './../../Image/dis1.jpg'
 import discount2 from './../../Image/dis2.jpg'
@@ -9,7 +9,7 @@ export default function Banner(props) {
 
     return (
         <div style={{ marginTop: '25px' }}>
-            <Carousel cardLength={1200} cardHeight={410}>
+            <Carousel cardLength={1200} cardHeight={410} widthContainer={window.innerWidth * 0.98}>
                 <Box sx={{ width: '1200px', height: '400px', marginLeft: '5px', marginRight: '5px', bgcolor: 'success.main', boxShadow: 3 }} >
                     <img src={discount1} alt={'1'} width={'100%'} height={'100%'} />
                 </Box>
