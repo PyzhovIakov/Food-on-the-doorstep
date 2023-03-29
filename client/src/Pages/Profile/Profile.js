@@ -48,7 +48,7 @@ export default function Profile() {
     const { loading, request, error, message, ClearError, ClearMessage } = useHttp()
     const ContextAuth = useContext(AuthContext)
     const [user, setUser] = useState({})
-    const [odrer, setOrder] = useState({})
+    const [odrer, setOrder] = useState(null)
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -61,9 +61,13 @@ export default function Profile() {
                 const dataUser = await request(`/auth/${ContextAuth.userId}`, 'GET')
                 setUser(dataUser)
                 const dataOrder = await request(`/order/${ContextAuth.userId}`, 'GET')
-                setOrder(dataOrder)
-                setOrder(prev => ({ ...prev, dateDelivery: DateAndTimeHandler.dateAndTime(dataOrder.dateDelivery), dateOrder: DateAndTimeHandler.dateAndTime(dataOrder.dateOrder) }))
-               
+                if (!dataOrder.error) {
+                    setOrder(dataOrder)
+                    setOrder(prev => ({ ...prev, dateDelivery: DateAndTimeHandler.dateAndTime(dataOrder.dateDelivery), dateOrder: DateAndTimeHandler.dateAndTime(dataOrder.dateOrder) }))
+                }
+                else {
+                    ClearError()
+                }
             } catch (e) { console.log('Profile useEffect', e) }
         }())
     }, [request])
@@ -106,7 +110,7 @@ export default function Profile() {
                                     aria-label="full width tabs example"
                                 >
                                     <Tab label="Личный данные" {...a11yProps(0)} />
-                                    <Tab label="Прошлый заказ" {...a11yProps(1)} />
+                                    <Tab label="Заказ" {...a11yProps(1)} />
                                 </Tabs>
                             </AppBar>
                             <TabPanel value={value} index={0}>
@@ -126,48 +130,55 @@ export default function Profile() {
                                 </Box>
                             </TabPanel>
                             <TabPanel value={value} index={1}>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
-                                    <h4 style={{ margin: '10px 20px' }}>Дата заказа</h4>
-                                    <h4 style={{ margin: '10px 20px' }}>{odrer.dateOrder}</h4>
-                                </Stack>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
-                                    <h4 style={{ margin: '10px 20px' }}>Дата доставки</h4>
-                                    <h4 style={{ margin: '10px 20px' }}>{odrer.dateDelivery}</h4>
-                                </Stack>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
-                                    <h4 style={{ margin: '10px 20px' }}>Статус заказа</h4>
-                                    <h4 style={{ margin: '10px 20px' }}>{odrer.status}</h4>
-                                </Stack>
-                                <Box sx={{ mt: 3 }}>
-                                    {
-                                        odrer.listProducts ?
-                                            <Carousel cardLength={250} cardHeight={190} widthContainer={window.innerWidth * 0.5}>
+                                {
+                                    odrer === null ?
+                                        <h4>Здесь будет отображаться прошлый или текущий заказ.</h4>
+                                        : <>
+                                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                                <h4 style={{ margin: '10px 20px' }}>Дата заказа</h4>
+                                                <h4 style={{ margin: '10px 20px' }}>{odrer.dateOrder}</h4>
+                                            </Stack>
+                                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                                <h4 style={{ margin: '10px 20px' }}>Дата доставки</h4>
+                                                <h4 style={{ margin: '10px 20px' }}>{odrer.dateDelivery}</h4>
+                                            </Stack>
+                                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ boxShadow: 3, borderRadius: '20px' }}>
+                                                <h4 style={{ margin: '10px 20px' }}>Статус заказа</h4>
+                                                <h4 style={{ margin: '10px 20px' }}>{odrer.status}</h4>
+                                            </Stack>
+                                            <Box sx={{ mt: 3 }}>
                                                 {
-                                                    odrer.listProducts.map((product, index) => (
-                                                        <Box key={index} sx={{ width: 220, height: 140, marginLeft: '5px', marginRight: '5px', borderRadius: '15px', boxShadow: 3 }}>
-                                                            <img
-                                                                src={product.product.imageUrl ? 'http://localhost:5000' + product.product.imageUrl : logo}
-                                                                width={'100%'}
-                                                                height={'100%'}
-                                                                style={{ borderRadius: '15px' }}
-                                                                alt={product.product.name}
-                                                            />
-                                                            <Chip
-                                                                label={product.count} 
-                                                                color="success" 
-                                                                sx={{
-                                                                    position: 'relative',
-                                                                    top: '-40px',
-                                                                    left:'5px'
-                                                                }} 
-                                                            />
-                                                        </Box>
-                                                    ))
+                                                    odrer.listProducts ?
+                                                        <Carousel cardLength={250} cardHeight={190} widthContainer={window.innerWidth * 0.5}>
+                                                            {
+                                                                odrer.listProducts.map((product, index) => (
+                                                                    <Box key={index} sx={{ width: 220, height: 140, marginLeft: '5px', marginRight: '5px', borderRadius: '15px', boxShadow: 3 }}>
+                                                                        <img
+                                                                            src={product.product.imageUrl ? 'http://localhost:5000' + product.product.imageUrl : logo}
+                                                                            width={'100%'}
+                                                                            height={'100%'}
+                                                                            style={{ borderRadius: '15px' }}
+                                                                            alt={product.product.name}
+                                                                        />
+                                                                        <Chip
+                                                                            label={product.count}
+                                                                            color="success"
+                                                                            sx={{
+                                                                                position: 'relative',
+                                                                                top: '-40px',
+                                                                                left: '5px'
+                                                                            }}
+                                                                        />
+                                                                    </Box>
+                                                                ))
+                                                            }
+                                                        </Carousel>
+                                                        : null
                                                 }
-                                            </Carousel>
-                                            : null
-                                    }
-                                </Box>
+                                            </Box>
+                                        </>
+                                }
+
                             </TabPanel>
                         </Box>
                     </Stack>

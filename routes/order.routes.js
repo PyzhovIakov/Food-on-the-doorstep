@@ -12,23 +12,23 @@ router.get('', async (req, res) => {
         res.json(order)
     }
     catch (e) {
-        res.status(500).json({ errors: 'Что-то пошло не так, попробуйте ещё раз.' })
+        res.status(500).json({ error: 'Что-то пошло не так, попробуйте ещё раз.' })
     }
 })
 
 router.get('/:id', async (req, res) => {
     try {
         const userId = req.params.id
-        const order = await Order.find({userId:userId}).sort({"dateOrder":-1}).populate('listProducts.product').populate('userId')
-        if(order.length==0){
-            res.status(400).json({ errors: 'Данных нет' })
-        }else{
+        const order = await Order.find({ userId: userId }).sort({ "dateOrder": -1 }).populate('listProducts.product').populate('userId')
+        if (order.length == 0) {
+            res.status(404).json({ error: 'Данных нет' })
+        } else {
             res.json(order[0])
         }
-        
+
     }
     catch (e) {
-        res.status(500).json({ errors: 'Что-то пошло не так, попробуйте ещё раз.' })
+        res.status(500).json({ error: 'Что-то пошло не так, попробуйте ещё раз.' })
     }
 })
 
