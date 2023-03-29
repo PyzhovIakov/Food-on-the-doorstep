@@ -45,6 +45,23 @@ export default function Catalog() {
     } catch (e) { console.log('Catalog AddProduct', e) }
   }
 
+  const Sorting = (sort, key) => {
+    console.log('sort', sort)
+    if (sort === 'none') {
+      const test = [...product[key]].sort((a, b) => a._id > b._id ? 1 : -1)
+      setProduct({...product,[key]:test})
+    }
+    if (sort === 'min') {
+      const test = [...product[key]].sort((a, b) => a.price - b.price)
+      setProduct({...product,[key]:test})
+    }
+    if (sort === 'max') {
+      const test = [...product[key]].sort((a, b) => b.price - a.price)
+      setProduct({...product,[key]:test})
+    }
+    
+  }
+
   useEffect(() => {
     fetchDataCatalog()
   }, [request])
@@ -74,7 +91,7 @@ export default function Catalog() {
               open={openDialogEditAndAddProduct}
               setOpen={seOpenDialogEditAndAddProduct}
             />
-            <CategoriesProduct product={product} DeleteProduct={DeleteProduct} EditProduct={EditProduct} />
+            <CategoriesProduct Sorting={Sorting} product={product} DeleteProduct={DeleteProduct} EditProduct={EditProduct} />
           </>
 
       }
