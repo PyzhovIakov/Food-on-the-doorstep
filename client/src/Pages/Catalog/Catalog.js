@@ -46,20 +46,18 @@ export default function Catalog() {
   }
 
   const Sorting = (sort, key) => {
-    console.log('sort', sort)
     if (sort === 'none') {
       const test = [...product[key]].sort((a, b) => a._id > b._id ? 1 : -1)
-      setProduct({...product,[key]:test})
+      setProduct({ ...product, [key]: test })
     }
     if (sort === 'min') {
       const test = [...product[key]].sort((a, b) => a.price - b.price)
-      setProduct({...product,[key]:test})
+      setProduct({ ...product, [key]: test })
     }
     if (sort === 'max') {
       const test = [...product[key]].sort((a, b) => b.price - a.price)
-      setProduct({...product,[key]:test})
+      setProduct({ ...product, [key]: test })
     }
-    
   }
 
   useEffect(() => {

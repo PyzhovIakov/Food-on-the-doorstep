@@ -6,10 +6,10 @@ export default function OrdersTape(props) {
 
     return (
         <>
-            <Box sx={{ width: '95%', marginLeft: 'auto', marginRight: 'auto' }}>
+            <Box sx={{ width: '98vw', marginLeft: 'auto', marginRight: 'auto' }}>
                 {
                     props.orders.length !== 0 ? props.orders.map((order, index) => (
-                        <OrderCard saveChanges={props.saveChanges} order={order} key={index} index={index} />
+                        <OrderCard DeleteOrder={props.DeleteOrder} saveChanges={props.saveChanges} order={order} key={index} index={index} />
                     )) : null
                 }
             </Box>

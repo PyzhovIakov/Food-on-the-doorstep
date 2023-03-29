@@ -6,7 +6,7 @@ import Select from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
 
 export default function CategoryHeader(props) {
-    const [Sort, setSort] = React.useState('');
+    const [Sort, setSort] = useState('');
 
     const handleChangeSort = (event) => {
         setSort(event.target.value)
