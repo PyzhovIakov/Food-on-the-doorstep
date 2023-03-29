@@ -33,4 +33,27 @@ router.post(
     }
 )
 
+router.patch('/:name', async (req, res) => {
+    try {
+
+        const name = req.params.name
+        const component = await Site.findOne({ name: name })
+        if (!component) {
+            return res.status(404).json({ error: 'Компонента нет' })
+        }
+
+        await Site.updateOne({ name: name }, {
+            name:name,
+            value: req.body.value
+        })
+        
+        res.json({ message: "Успешно" })
+
+    }
+    catch (e) {
+        res.status(500).json({ error: 'Что-то пошло не так, попробуйте ещё раз.' })
+    }
+})
+
+
 module.exports = router
