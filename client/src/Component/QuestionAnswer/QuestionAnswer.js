@@ -5,13 +5,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-const listQuestionsAnswers = [
-    { question: 'Почему мы?', title: 'А почему бы и нет', answer: 'Потому что можем.' },
-    { question: 'Сколько времени уйдет на приготовление?', title: '30 мин', answer: 'На каждом рецепте указано время его приготовления. В среднем на приготовление блюда потребуется 30 минут. В любом случае весь процесс займет существенно меньше времени, чем вы тратите обычно, и будет куда приятнее.' },
-    { question: 'В какие города вы доставляете?', title: 'По России', answer: 'Так как границы России нигде не кончаются, то по всему шарику.' }
-]
 
-export default function QuestionAnswer() {
+export default function QuestionAnswer(props) {
     const [expanded, setExpanded] = useState(false);
 
     const handleChange = (panel) => (event, isExpanded) => {
@@ -21,7 +16,7 @@ export default function QuestionAnswer() {
     return (
         <div style={{ width: '90%', margin: '30px auto' }}>
             {
-                listQuestionsAnswers.map((QA, index) => (
+                props.listQuestionsAnswers.map((QA, index) => (
                     <Accordion key={index} expanded={expanded === 'panel' + index} onChange={handleChange('panel' + index)}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h5" sx={{ width: '45%', flexShrink: 0 }}>
