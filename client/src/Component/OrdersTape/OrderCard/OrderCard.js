@@ -30,7 +30,7 @@ export default function OrderCard(props) {
             key={props.index}
             direction="row"
             justifyContent="space-between"
-            sx={{ boxShadow: 5, marginTop: '10px' }}
+            sx={{ boxShadow: 5, marginTop: '10px',borderRadius:'20px',p:1 }}
         >
             <h3 style={{ minWidth: '20%' }}>{props.order.fullname}</h3>
             <Stack direction="row" spacing={2} sx={{ marginLeft: '10px' }}>
@@ -65,7 +65,7 @@ export default function OrderCard(props) {
                 <Button variant="contained" color="success" sx={{ borderRadius: '50%', m: 0, p: '10px', minWidth: 0 }}>
                     <SearchIcon />
                 </Button>
-                <Button variant="contained" color="success" sx={{ borderRadius: '50%', m: 0, p: '10px', minWidth: 0 }}>
+                <Button onClick={() => props.DeleteOrder(props.order._id)} variant="contained" color="success" sx={{ borderRadius: '50%', m: 0, p: '10px', minWidth: 0 }}>
                     <DeleteIcon />
                 </Button>
             </Stack>
