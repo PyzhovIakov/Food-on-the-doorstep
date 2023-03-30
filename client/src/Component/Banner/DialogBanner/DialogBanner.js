@@ -47,10 +47,10 @@ export default function DialogBanner(props) {
                 </DialogTitle>
                 <DialogContent>
                     {error ? <Alert severity="error" onClose={ClearError}>{error}</Alert> : null}
-                    <Stack direction="row">
+                    <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
                         {
                             loading ?
-                                <Skeleton variant="rounded" width={1200} height={200} /> :
+                                <Skeleton variant="rounded" width={600} height={200} /> :
                                 <img
                                     src={BannerImg ? 'http://localhost:5000' + BannerImg : logo}
                                     height={'200px'}
@@ -59,21 +59,29 @@ export default function DialogBanner(props) {
                                 />
                         }
                         <div>
+                            <p>Рекомендуется расширение картинки 1200*400</p>
                             <input ref={imageFile} onChange={ChangeFileImage} style={{ display: 'none' }} type="file" id="imageUrl" name="imageUrl" accept="image/png, image/jpeg" />
-                            <Button
-                                variant="outlined"
-                                color="success"
-                                startIcon={<CameraAltIcon size="large" />}
-                                sx={{ borderRadius: '15px', width: '200px' }}
-                                onClick={() => imageFile.current.click()}
-                            >
-                                Изменить фото
-                            </Button>
                         </div>
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Отмена</Button>
+                    <Button
+                        variant="outlined"
+                        color="success"
+                        startIcon={<CameraAltIcon size="large" />}
+                        sx={{ borderRadius: '15px' }}
+                        onClick={() => imageFile.current.click()}
+                    >
+                        Изменить фото
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        sx={{ borderRadius: '15px'}}
+                    >
+                        Сохранить
+                    </Button>
+                    <Button variant="outlined"  sx={{ borderRadius: '15px' }} onClick={handleClose}>Отмена</Button>
                 </DialogActions>
             </Dialog>
         </div>
