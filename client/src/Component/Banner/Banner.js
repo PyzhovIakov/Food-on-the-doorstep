@@ -17,12 +17,13 @@ export default function Banner(props) {
                             <img
                                 src={'http://localhost:5000' + img}
                                 width={'100%'}
+                                height={'100%'}
                                 style={{ borderRadius: '15px' }}
                                 alt={img}
                             />
                             {
                                 ContextAuth.role === 'admin' ?
-                                    <Button variant="contained" color="success" sx={{ borderRadius: '15px', m: '20px 5px',position:'relative',top:'-80px',left:'67vw'}} startIcon={<DeleteIcon />}>
+                                    <Button onClick={()=>props.deleteImagesBanner(img)} variant="contained" color="success" sx={{ borderRadius: '15px', m: '20px 5px',position:'relative',top:'-80px',left:'67vw'}} startIcon={<DeleteIcon />}>
                                         Удалить изображение
                                     </Button>
                                     : null

@@ -77,11 +77,15 @@ export default function DialogBanner(props) {
                     <Button
                         variant="contained"
                         color="success"
-                        sx={{ borderRadius: '15px'}}
+                        sx={{ borderRadius: '15px' }}
+                        onClick={() => {
+                            props.AddImagesBanner(BannerImg)
+                            handleClose()
+                        }}
                     >
                         Сохранить
                     </Button>
-                    <Button variant="outlined"  sx={{ borderRadius: '15px' }} onClick={handleClose}>Отмена</Button>
+                    <Button variant="outlined" sx={{ borderRadius: '15px' }} onClick={handleClose}>Отмена</Button>
                 </DialogActions>
             </Dialog>
         </div>

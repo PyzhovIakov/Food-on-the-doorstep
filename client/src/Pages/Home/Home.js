@@ -20,12 +20,30 @@ export default function Home() {
         try {
             const dataBanner = await request('/site/banner', 'GET')
             setBanner(dataBanner.value)
-            console.log('dataBanner.value', dataBanner.value)
             const dataQuestionAnswer = await request('/site/questionAnswer', 'GET')
             setQuestionAnswer(dataQuestionAnswer.value)
-            console.log('dataQuestionAnswer.value', dataQuestionAnswer.value)
-        } catch (e) { console.log('Profile useEffect', e) }
+        } catch (e) { console.log('Home fetchDataHome', e) }
     }
+
+    const addImagesBanner = async (img) => {
+        try {
+            if (img) {
+                setBanner([...banner, img])
+                await request('/site/banner', 'PATCH', { value: [...banner, img] })
+            }
+        } catch (e) { console.log('Home deleteAndAddImagesBanner', e) }
+    }
+
+    const deleteImagesBanner = async (img)=>{
+        try {
+            if (img && banner.length>1) {
+                setBanner(banner.filter(item => item !== img))
+                await request('/site/banner', 'PATCH', { value: banner.filter(item => item !== img) })
+            }
+        } catch (e) { console.log('Home deleteAndAddImagesBanner', e) }
+        
+    }
+
 
     useEffect(() => {
         fetchDataHome()
@@ -51,6 +69,7 @@ export default function Home() {
                                         Добавить изображений в баннер
                                     </Button>
                                     <DialogBanner
+                                        AddImagesBanner={addImagesBanner}
                                         banner={banner}
                                         open={openDialogBanner}
                                         setOpen={seOpenDialogBanner}
@@ -58,7 +77,7 @@ export default function Home() {
                                 </>
                                 : null
                         }
-                        <Banner banner={banner} />
+                        <Banner banner={banner} deleteImagesBanner={deleteImagesBanner}/>
                         <QuestionAnswer listQuestionsAnswers={questionAnswer} />
                     </>
             }
