@@ -1,20 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import LinearProgress from '@mui/material/LinearProgress'
 import Alert from '@mui/material/Alert'
-import Button from '@mui/material/Button'
-import AddIcon from '@mui/icons-material/Add'
 import useHttp from './../../hooks/http.hook.js'
-import AuthContext from './../../context/AuthContext'
 import Banner from './../../Component/Banner/Banner'
 import QuestionAnswer from './../../Component/QuestionAnswer/QuestionAnswer'
-import DialogBanner from './../../Component/Banner/DialogBanner/DialogBanner'
 
 export default function Home() {
     const { loading, request, error, message, ClearError, ClearMessage } = useHttp()
-    const ContextAuth = useContext(AuthContext)
     const [banner, setBanner] = useState([])
     const [questionAnswer, setQuestionAnswer] = useState([])
-    const [openDialogBanner, seOpenDialogBanner] = useState(false)
 
     const fetchDataHome = async () => {
         try {
@@ -34,16 +28,33 @@ export default function Home() {
         } catch (e) { console.log('Home deleteAndAddImagesBanner', e) }
     }
 
-    const deleteImagesBanner = async (img)=>{
+    const deleteImagesBanner = async (img) => {
         try {
-            if (img && banner.length>1) {
+            if (img && banner.length > 1) {
                 setBanner(banner.filter(item => item !== img))
                 await request('/site/banner', 'PATCH', { value: banner.filter(item => item !== img) })
             }
         } catch (e) { console.log('Home deleteAndAddImagesBanner', e) }
-        
+
     }
 
+    const deleteQuestionAnswer = async (QA) => {
+        try {
+            if (QA && questionAnswer.length > 1) {
+                setQuestionAnswer(questionAnswer.filter(item => item.question !== QA.question))
+                await request('/site/questionAnswer', 'PATCH', { value: questionAnswer.filter(item => item.question !== QA.question) })
+            }
+        } catch (e) { console.log('Home deleteQuestionAnswer', e) }
+    }
+
+    const addQuestionAnswer = async (item) => {
+        try {
+            if (item && item.question !== '' && item.answer !== '') {
+                setQuestionAnswer([...questionAnswer, item])
+                await request('/site/questionAnswer', 'PATCH', { value: [...questionAnswer, item] })
+            }
+        } catch (e) { console.log('Home addQuestionAnswer', e) }
+    }
 
     useEffect(() => {
         fetchDataHome()
@@ -62,23 +73,8 @@ export default function Home() {
                 loading ?
                     <LinearProgress color="success" /> :
                     <>
-                        {
-                            ContextAuth.role === 'admin' ?
-                                <>
-                                    <Button onClick={() => seOpenDialogBanner(true)} variant="contained" color="success" sx={{ borderRadius: '15px', m: '20px 5px' }} startIcon={<AddIcon />}>
-                                        Добавить изображений в баннер
-                                    </Button>
-                                    <DialogBanner
-                                        AddImagesBanner={addImagesBanner}
-                                        banner={banner}
-                                        open={openDialogBanner}
-                                        setOpen={seOpenDialogBanner}
-                                    />
-                                </>
-                                : null
-                        }
-                        <Banner banner={banner} deleteImagesBanner={deleteImagesBanner}/>
-                        <QuestionAnswer listQuestionsAnswers={questionAnswer} />
+                        <Banner banner={banner} deleteImagesBanner={deleteImagesBanner} addImagesBanner={addImagesBanner} />
+                        <QuestionAnswer addQuestionAnswer={addQuestionAnswer} deleteQuestionAnswer={deleteQuestionAnswer} listQuestionsAnswers={questionAnswer} />
                     </>
             }
 

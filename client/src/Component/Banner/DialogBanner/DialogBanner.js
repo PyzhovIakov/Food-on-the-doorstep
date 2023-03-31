@@ -72,14 +72,14 @@ export default function DialogBanner(props) {
                         sx={{ borderRadius: '15px' }}
                         onClick={() => imageFile.current.click()}
                     >
-                        Изменить фото
+                        Добавить фото
                     </Button>
                     <Button
                         variant="contained"
                         color="success"
                         sx={{ borderRadius: '15px' }}
                         onClick={() => {
-                            props.AddImagesBanner(BannerImg)
+                            props.addImagesBanner(BannerImg)
                             handleClose()
                         }}
                     >
