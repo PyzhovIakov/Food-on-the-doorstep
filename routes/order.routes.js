@@ -108,5 +108,18 @@ router.patch('/:id', orderUpdateCheck, async (req, res) => {
     }
 })
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const orderId = req.params.id
+
+        await Order.findOneAndDelete({ _id: orderId })
+
+        res.json({ message: "Успешно" })
+
+    }
+    catch (e) {
+        res.status(500).json({ error: 'Что-то пошло не так, попробуйте ещё раз.' })
+    }
+})
 
 module.exports = router

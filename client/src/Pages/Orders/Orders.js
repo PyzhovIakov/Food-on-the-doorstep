@@ -15,6 +15,13 @@ export default function Orders() {
         } catch (e) { console.log('Orders fetchDataOrders', e) }
     }
 
+    const DeleteOrder = async (id) => {
+        try {
+          await request(`/order/${id}`, 'DELETE')
+          fetchDataOrders()
+        } catch (e) { console.log('Orders DeleteOrder', e) }
+    }
+
     const saveChanges = async (id, formOrderCard) => {
         try {
             await request(
@@ -43,7 +50,7 @@ export default function Orders() {
             {error ? <Alert severity="warning" onClose={ClearError}>{error}</Alert> : null}
             {message ? <Alert severity="info" onClose={ClearMessage}>{message}</Alert> : null}
             <h1>Заказы</h1>
-            {loading ? <LinearProgress color="success" /> : <OrdersTape saveChanges={saveChanges} orders={orders} />}
+            {loading ? <LinearProgress color="success" /> : <OrdersTape DeleteOrder={DeleteOrder} saveChanges={saveChanges} orders={orders} />}
         </div>
     );
 }
