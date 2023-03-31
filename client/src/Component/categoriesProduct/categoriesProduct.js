@@ -4,9 +4,6 @@ import ProductCard from './ProductCard/ProductCard'
 import CategoryHeader from './CategoryHeader/CategoryHeader'
 
 export default function CategoriesProduct(props) {
-
-   
-
     return (
         <div>
             {

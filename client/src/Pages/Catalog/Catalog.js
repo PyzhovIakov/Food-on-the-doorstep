@@ -91,7 +91,6 @@ export default function Catalog() {
             />
             <CategoriesProduct Sorting={Sorting} product={product} DeleteProduct={DeleteProduct} EditProduct={EditProduct} />
           </>
-
       }
     </div>
   );
